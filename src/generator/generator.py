@@ -52,12 +52,22 @@ class CodeGenerator(ASTVisitor):
         self._emit_no_indent("import sys")
         self._emit("")
 
-        # Generate all statements
+        # Track if we have a main function
+        has_main = False
         for stmt in node.statements:
             self.visit(stmt)
             # Add blank line after function declarations
             if isinstance(stmt, FuncDecl):
+                if stmt.name == "main":
+                    has_main = True
                 self._emit("")
+
+        # Call main() if it exists
+        if has_main:
+            self._emit("if __name__ == '__main__':")
+            self.indent_level += 1
+            self._emit("main()")
+            self.indent_level -= 1
 
         return None
 
