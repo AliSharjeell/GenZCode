@@ -49,12 +49,21 @@ class Interpreter(ASTVisitor):
             if isinstance(stmt, FuncDecl):
                 self._register_function(stmt)
 
-        # Execute all statements
+        # Check if main function exists
+        has_main = 'main' in self.functions
+
+        # Execute all statements (except function definitions)
         result = None
         for stmt in ast.statements:
             if isinstance(stmt, FuncDecl):
                 continue  # Already registered
             result = self.execute_statement(stmt)
+
+        # Auto-call main() if defined with no parameters
+        if has_main:
+            main_func = self.functions['main']
+            if len(main_func.params) == 0:
+                result = main_func.call([], self)
 
         return result
 
