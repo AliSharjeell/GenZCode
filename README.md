@@ -50,8 +50,15 @@ vibe_check factorial(n: num) {
 }
 
 // Control flow
-bestie;       // break
-its_giving;   // continue
+bounce;       // break - bounce out
+next_up;      // continue - next iteration
+
+// Switch statement
+ratio (x) {
+    bet 1: { spill_tea("one"); }
+    bet 2: { spill_tea("two"); }
+    nvm: { spill_tea("other"); }
+}
 
 // Booleans
 lowkey is_coding: num = no_cap;   // true
@@ -71,8 +78,11 @@ lowkey is_sus: num = fr_fr;        // false
 | `spill_tea` | `print` | Output |
 | `vibe_check` | `function` | Function declaration |
 | `slay` | `return` | Return value |
-| `bestie` | `break` | Exit loop |
-| `its_giving` | `continue` | Next iteration |
+| `bounce` | `break` | Exit loop |
+| `next_up` | `continue` | Next iteration |
+| `ratio` | `switch` | Switch statement |
+| `bet` | `case` | Case in switch |
+| `nvm` | `default` | Default case |
 | `no_cap` | `true` | Boolean true |
 | `fr_fr` | `false` | Boolean false |
 
