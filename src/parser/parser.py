@@ -8,7 +8,7 @@ from src.lexer.lexer import Lexer, LexerError
 from src.lexer.tokens import Token, TokenType
 from .ast import (
     ASTNode, Program, VarDecl, FuncDecl, FuncParam, Assignment, PrintStmt,
-    IfStmt, WhileStmt, ReturnStmt, BreakStmt, ContinueStmt, ExprStmt, Block,
+    IfStmt, SwitchStmt, WhileStmt, ReturnStmt, BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
 
@@ -118,12 +118,14 @@ class Parser:
             return self._while_statement()
         elif self._match(TokenType.SLAY):
             return self._return_statement()
-        elif self._match(TokenType.BESTIE):
-            self._consume(TokenType.SEMI, "Expected ';' after 'bestie'")
+        elif self._match(TokenType.BOUNCE):
+            self._consume(TokenType.SEMI, "Expected ';' after 'bounce'")
             return BreakStmt()
-        elif self._match(TokenType.ITS_GIVING):
-            self._consume(TokenType.SEMI, "Expected ';' after 'its_giving'")
+        elif self._match(TokenType.NEXT_UP):
+            self._consume(TokenType.SEMI, "Expected ';' after 'next_up'")
             return ContinueStmt()
+        elif self._match(TokenType.RATIO):
+            return self._switch_statement()
         elif self._match(TokenType.LBRACE):
             return self._block()
         elif self._match(TokenType.LOWKEY):
@@ -182,6 +184,43 @@ class Parser:
         body = self._statement()
 
         return WhileStmt(condition=condition, body=body)
+
+    def _switch_statement(self) -> SwitchStmt:
+        """Parse: ratio ( expr ) { bet value: statements nvm: statements }"""
+        self._consume(TokenType.LPAREN, "Expected '(' after 'ratio'")
+        switch_expr = self._expression()
+        self._consume(TokenType.RPAREN, "Expected ')' after switch expression")
+        self._consume(TokenType.LBRACE, "Expected '{' after switch")
+
+        cases: list[tuple[Expr, list[ASTNode]]] = []
+        default_case: Optional[list[ASTNode]] = None
+
+        while not self._check(TokenType.RBRACE) and not self._is_at_end():
+            if self._match(TokenType.BET):
+                # Case
+                case_value = self._expression()
+                self._consume(TokenType.COLON, "Expected ':' after case value")
+                self._consume(TokenType.LBRACE, "Expected '{' after case colon")
+                case_statements = self._parse_block_statements()
+                cases.append((case_value, case_statements))
+            elif self._match(TokenType.NVM):
+                # Default case
+                self._consume(TokenType.COLON, "Expected ':' after 'nvm'")
+                self._consume(TokenType.LBRACE, "Expected '{' after nvm colon")
+                default_case = self._parse_block_statements()
+            else:
+                raise self._error(f"Expected 'bet' or 'nvm' in switch, got '{self._peek().lexeme}'")
+
+        self._consume(TokenType.RBRACE, "Expected '}' after switch")
+        return SwitchStmt(expression=switch_expr, cases=cases, default=default_case)
+
+    def _parse_block_statements(self) -> list[ASTNode]:
+        """Parse statements until closing brace."""
+        statements: list[ASTNode] = []
+        while not self._check(TokenType.RBRACE) and not self._is_at_end():
+            statements.append(self._statement())
+        self._consume(TokenType.RBRACE, "Expected '}' after block")
+        return statements
 
     def _return_statement(self) -> ReturnStmt:
         """Parse: slay expr? ;"""

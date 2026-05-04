@@ -6,7 +6,7 @@ Actually executes GenZ code directly instead of generating Python.
 from typing import Any, Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
@@ -150,13 +150,30 @@ class Interpreter(ASTVisitor):
 
     def visit_break_stmt(self, node: BreakStmt) -> object:
         if not self.in_loop:
-            raise InterpreterError("'bestie' must be inside a loop")
+            raise InterpreterError("'bounce' must be inside a loop")
         raise BreakException()
 
     def visit_continue_stmt(self, node: ContinueStmt) -> object:
         if not self.in_loop:
-            raise InterpreterError("'its_giving' must be inside a loop")
+            raise InterpreterError("'next_up' must be inside a loop")
         raise ContinueException()
+
+    def visit_switch_stmt(self, node: SwitchStmt) -> object:
+        switch_value = self._evaluate_expr(node.expression)
+
+        # Execute matching case
+        for case_value, case_stmts in node.cases:
+            if self._evaluate_expr(case_value) == switch_value:
+                for stmt in case_stmts:
+                    self.visit(stmt)
+                return None
+
+        # Execute default case if no match
+        if node.default:
+            for stmt in node.default:
+                self.visit(stmt)
+
+        return None
 
     def visit_expr_stmt(self, node: ExprStmt) -> object:
         return self._evaluate_expr(node.expression)

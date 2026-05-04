@@ -22,10 +22,13 @@ class TokenType(Enum):
     SPILL_TEA = auto()   # print
     VIBE_CHECK = auto()  # function
     SLAY = auto()        # return
-    BESTIE = auto()      # break
-    ITS_GIVING = auto()  # continue
+    BOUNCE = auto()      # break (leave the situation)
+    NEXT_UP = auto()     # continue (next iteration)
     NO_CAP = auto()      # true
     FR_FR = auto()       # false
+    RATIO = auto()       # switch
+    BET = auto()         # case
+    NVM = auto()         # default (nvm, that's it)
 
     # Operators
     PLUS = auto()        # +
@@ -70,10 +73,13 @@ KEYWORDS = {
     'spill_tea': TokenType.SPILL_TEA,
     'vibe_check': TokenType.VIBE_CHECK,
     'slay': TokenType.SLAY,
-    'bestie': TokenType.BESTIE,
-    'its_giving': TokenType.ITS_GIVING,
+    'bounce': TokenType.BOUNCE,
+    'next_up': TokenType.NEXT_UP,
     'no_cap': TokenType.NO_CAP,
     'fr_fr': TokenType.FR_FR,
+    'ratio': TokenType.RATIO,
+    'bet': TokenType.BET,
+    'nvm': TokenType.NVM,
 }
 
 

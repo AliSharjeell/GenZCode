@@ -6,7 +6,7 @@ Generator Gary's work: translate the AST into Python code.
 from typing import Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall
 )
@@ -128,6 +128,35 @@ class CodeGenerator(ASTVisitor):
             self._emit("else:")
             self.indent_level += 1
             self.visit(node.else_branch)
+            self.indent_level -= 1
+
+        return None
+
+    def visit_switch_stmt(self, node: SwitchStmt) -> object:
+        switch_expr = self._generate_expr(node.expression)
+        self._emit(f"_switch_value = {switch_expr}")
+
+        # Generate if-elif chain for cases
+        first = True
+        for case_value, case_stmts in node.cases:
+            case_expr = self._generate_expr(case_value)
+            if first:
+                self._emit(f"if _switch_value == {case_expr}:")
+                first = False
+            else:
+                self._emit(f"elif _switch_value == {case_expr}:")
+
+            self.indent_level += 1
+            for stmt in case_stmts:
+                self.visit(stmt)
+            self.indent_level -= 1
+
+        # Default case
+        if node.default:
+            self._emit("else:")
+            self.indent_level += 1
+            for stmt in node.default:
+                self.visit(stmt)
             self.indent_level -= 1
 
         return None

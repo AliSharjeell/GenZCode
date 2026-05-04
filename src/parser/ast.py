@@ -51,6 +51,10 @@ class ASTVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_switch_stmt(self, node: SwitchStmt) -> object:
+        pass
+
+    @abstractmethod
     def visit_while_stmt(self, node: WhileStmt) -> object:
         pass
 
@@ -199,6 +203,18 @@ class WhileStmt(ASTNode):
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_while_stmt(self)
+
+
+@dataclass
+class SwitchStmt(ASTNode):
+    """Switch statement: ratio (expr) { bet value: { ... } nvm: { ... } }"""
+
+    expression: Expr
+    cases: list[tuple[Expr, list[ASTNode]]]  # list of (case_value, statements)
+    default: Optional[list[ASTNode]] = None  # nvm case
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_switch_stmt(self)
 
 
 @dataclass

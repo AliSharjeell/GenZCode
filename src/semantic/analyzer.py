@@ -6,7 +6,7 @@ Semantic Sam's work: type checking, scope management, and validation.
 from typing import Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
@@ -246,6 +246,23 @@ class SemanticAnalyzer(ASTVisitor):
 
         return None
 
+    def visit_switch_stmt(self, node: SwitchStmt) -> object:
+        # Analyze switch expression
+        switch_type = self._get_expr_type(node.expression)
+
+        # Analyze each case
+        for case_value, case_stmts in node.cases:
+            case_type = self._get_expr_type(case_value)
+            for stmt in case_stmts:
+                self.visit(stmt)
+
+        # Analyze default case
+        if node.default:
+            for stmt in node.default:
+                self.visit(stmt)
+
+        return None
+
     def visit_while_stmt(self, node: WhileStmt) -> object:
         # Check condition type
         cond_type = self._get_expr_type(node.condition)
@@ -285,12 +302,12 @@ class SemanticAnalyzer(ASTVisitor):
 
     def visit_break_stmt(self, node: BreakStmt) -> object:
         if not self.symbol_table.in_loop():
-            raise SemanticError("'bestie' must be inside a loop")
+            raise SemanticError("'bounce' must be inside a loop")
         return None
 
     def visit_continue_stmt(self, node: ContinueStmt) -> object:
         if not self.symbol_table.in_loop():
-            raise SemanticError("'its_giving' must be inside a loop")
+            raise SemanticError("'next_up' must be inside a loop")
         return None
 
     def visit_expr_stmt(self, node: ExprStmt) -> object:
