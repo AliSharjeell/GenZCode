@@ -21,7 +21,7 @@ class TestCodeGenerator:
         """Test generating a simple hello world."""
         source = 'spill_tea("hello world");'
         code = self._generate(source)
-        assert 'print("hello world")' in code
+        assert "print('hello world')" in code or 'print("hello world")' in code
 
     def test_variable_declaration_num(self):
         """Test generating numeric variable declaration."""
@@ -33,7 +33,7 @@ class TestCodeGenerator:
         """Test generating string variable declaration."""
         source = 'lowkey name: txt = "bruh";'
         code = self._generate(source)
-        assert 'name = "bruh"' in code
+        assert "name = 'bruh'" in code or 'name = "bruh"' in code
 
     def test_variable_declaration_no_init(self):
         """Test generating variable without initializer."""

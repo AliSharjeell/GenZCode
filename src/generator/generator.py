@@ -124,6 +124,9 @@ class CodeGenerator(ASTVisitor):
 
     def visit_while_stmt(self, node: WhileStmt) -> object:
         condition = self._generate_expr(node.condition)
+        # Remove outer parentheses for cleaner output
+        if condition.startswith("(") and condition.endswith(")"):
+            condition = condition[1:-1]
 
         self._emit(f"while {condition}:")
         self.indent_level += 1
@@ -194,7 +197,13 @@ class CodeGenerator(ASTVisitor):
         elif isinstance(expr, Binary):
             left = self._generate_expr(expr.left)
             right = self._generate_expr(expr.right)
-            return f"({left} {expr.operator} {right})"
+            # Convert GenZ operators to Python
+            op = expr.operator
+            if op == '&&':
+                op = 'and'
+            elif op == '||':
+                op = 'or'
+            return f"({left} {op} {right})"
 
         elif isinstance(expr, Unary):
             operand = self._generate_expr(expr.operand)
@@ -210,7 +219,9 @@ class CodeGenerator(ASTVisitor):
         elif isinstance(expr, Assignment):
             target = self._generate_expr(expr.target)
             value = self._generate_expr(expr.value)
-            return f"({target} = {value})"
+            # For simple assignments like x = value, don't add extra parens
+            # Just return the assignment expression (used in expression contexts)
+            return f"{target} = {value}"
 
         else:
             return "<unknown_expr>"
