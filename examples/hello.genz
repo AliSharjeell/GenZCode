@@ -33,7 +33,7 @@ vibe_check fibonacci(n: num) {
     slay a;
 }
 
-// Main function
+// Main function - auto-calls when defined
 vibe_check main() {
     lowkey result: num = factorial(5);
     spill_tea("factorial(5) = ", result);
@@ -41,11 +41,22 @@ vibe_check main() {
     lowkey fib: num = fibonacci(10);
     spill_tea("fibonacci(10) = ", fib);
 
-    // Loop demo
+    // Loop demo with bounce (break)
     lowkey i: num = 5;
     keep_yapping (i > 0) {
         spill_tea("countdown: ", i);
         i = i - 1;
+    }
+
+    // Switch statement with ratio/bet/nvm
+    lowkey day: num = 3;
+    ratio (day) {
+        bet 1: { spill_tea("it's monday"); }
+        bet 2: { spill_tea("it's tuesday"); }
+        bet 3: { spill_tea("it's wednesday"); }
+        bet 4: { spill_tea("it's thursday"); }
+        bet 5: { spill_tea("it's friday"); }
+        nvm: { spill_tea("it's the weekend!"); }
     }
 
     // Boolean demo
