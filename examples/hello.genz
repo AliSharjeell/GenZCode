@@ -1,0 +1,58 @@
+// GenZ/Brainrot Hello World Program
+// This is bussin fr fr
+
+// Declare some variables
+lowkey name: txt = "World";
+lowkey age: num = 21;
+
+// Print a greeting
+spill_tea("what's good, " + name + "!");
+
+// Calculate factorial recursively
+vibe_check factorial(n: num) {
+    sus (n <= 1) {
+        slay 1;
+    } deadass {
+        slay n * factorial(n - 1);
+    }
+}
+
+// Calculate fibonacci iteratively
+vibe_check fibonacci(n: num) {
+    lowkey a: num = 0;
+    lowkey b: num = 1;
+    lowkey i: num = 0;
+
+    keep_yapping (i < n) {
+        lowkey temp: num = a;
+        a = b;
+        b = temp + b;
+        i = i + 1;
+    }
+
+    slay a;
+}
+
+// Main function
+vibe_check main() {
+    lowkey result: num = factorial(5);
+    spill_tea("factorial(5) = ", result);
+
+    lowkey fib: num = fibonacci(10);
+    spill_tea("fibonacci(10) = ", fib);
+
+    // Loop demo
+    lowkey i: num = 5;
+    keep_yapping (i > 0) {
+        spill_tea("countdown: ", i);
+        i = i - 1;
+    }
+
+    // Boolean demo
+    lowkey is_coding: num = no_cap;
+    sus (is_coding) {
+        spill_tea("coding is sus but also no_cap bussin");
+    } deadass {
+        spill_tea("this won't print");
+    }
+}
