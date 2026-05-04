@@ -28,6 +28,9 @@ class SemanticAnalyzer(ASTVisitor):
         self.current_function = None
         self.errors = []
 
+        # Register built-in functions
+        self._register_builtins()
+
         # First pass: collect all function declarations
         for stmt in ast.statements:
             if isinstance(stmt, FuncDecl):
@@ -55,6 +58,25 @@ class SemanticAnalyzer(ASTVisitor):
             return_type=return_type,
             param_types=param_types
         )
+
+    def _declare_builtin_function(self, name: str, param_count: int = -1) -> None:
+        """Register a built-in function."""
+        param_types = [TypeInfo(base_type="num") for _ in range(param_count)]
+        self.symbol_table.define_function(
+            name=name,
+            return_type=TypeInfo(base_type="num"),
+            param_types=param_types
+        )
+
+    def _register_builtins(self) -> None:
+        """Register all built-in functions."""
+        builtins = {
+            'print': 0, 'len': 1, 'str': 1, 'num': 1,
+            'range': -1, 'abs': 1, 'pow': 2, 'sqrt': 1,
+            'input': 0
+        }
+        for name, param_count in builtins.items():
+            self._declare_builtin_function(name, param_count)
 
     def _get_expr_type(self, expr: Expr) -> TypeInfo:
         """Infer the type of an expression."""

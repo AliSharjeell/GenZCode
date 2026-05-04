@@ -47,6 +47,8 @@ class UserFunction:
                     result = result.value
                     break
             return result
+        except ReturnValue as e:
+            return e.value
         finally:
             interpreter.environment = old_env
 
@@ -61,20 +63,19 @@ class UserFunction:
         return "num"
 
 
-@dataclass
-class ReturnValue:
+class ReturnValue(Exception):
     """Used to unwrap from functions."""
-    value: Any
+    def __init__(self, value: Any):
+        self.value = value
+        super().__init__()
 
 
-@dataclass
-class BreakException:
+class BreakException(Exception):
     """Used to break from loops."""
     pass
 
 
-@dataclass
-class ContinueException:
+class ContinueException(Exception):
     """Used to continue in loops."""
     pass
 

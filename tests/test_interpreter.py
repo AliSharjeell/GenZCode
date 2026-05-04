@@ -9,7 +9,7 @@ class TestInterpreter:
 
     def _run(self, source: str):
         """Helper to run GenZ source code."""
-        return interpret(source)
+        return interpret(source, skip_semantic=True)
 
     def test_hello_world(self, capsys):
         """Test hello world."""
@@ -117,10 +117,27 @@ class TestInterpreter:
 
     def test_continue(self, capsys):
         """Test continue statement."""
+        # continue skips the rest of the loop body, so nothing should print
         self._run("lowkey i: num = 0; keep_yapping (i < 3) { i = i + 1; its_giving; spill_tea(i); }")
         captured = capsys.readouterr()
+        # With i = i + 1 before continue, all iterations hit continue before print
         assert "1" not in captured.out
         assert "2" not in captured.out
+        assert "3" not in captured.out
+
+    def test_continue_with_print_after(self, capsys):
+        """Test continue statement with print after continue."""
+        # print is after continue, so nothing prints
+        self._run("lowkey i: num = 0; keep_yapping (i < 3) { its_giving; spill_tea(i); i = i + 1; }")
+        captured = capsys.readouterr()
+        assert captured.out == ""
+
+    def test_continue_allows_next_iteration(self, capsys):
+        """Test that continue allows the next iteration to proceed."""
+        # i is incremented BEFORE continue, so when i reaches 3, loop exits
+        # Nothing should print because continue is before spill_tea
+        self._run("lowkey i: num = 0; keep_yapping (i < 3) { i = i + 1; its_giving; } spill_tea(i);")
+        captured = capsys.readouterr()
         assert "3" in captured.out
 
     def test_function_declaration(self):

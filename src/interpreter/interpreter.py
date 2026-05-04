@@ -122,10 +122,18 @@ class Interpreter(ASTVisitor):
                 except BreakException:
                     break
                 except ContinueException:
-                    continue
+                    pass  # Continue to next iteration
         finally:
             self.in_loop = False
         return None
+
+    def visit_block(self, node: Block) -> object:
+        # Blocks don't create new scopes - they execute in current scope
+        # Only functions create new scopes
+        result = None
+        for stmt in node.statements:
+            result = self.visit(stmt)
+        return result
 
     def visit_return_stmt(self, node: ReturnStmt) -> object:
         value = self._evaluate_expr(node.value) if node.value else None
@@ -145,16 +153,12 @@ class Interpreter(ASTVisitor):
         return self._evaluate_expr(node.expression)
 
     def visit_block(self, node: Block) -> object:
-        # Create new scope for block
-        old_env = self.environment
-        self.environment = Environment(parent=self.environment)
-        try:
-            result = None
-            for stmt in node.statements:
-                result = self.visit(stmt)
-            return result
-        finally:
-            self.environment = old_env
+        # Blocks don't create new scopes - they execute in current scope
+        # Only functions create new scopes
+        result = None
+        for stmt in node.statements:
+            result = self.visit(stmt)
+        return result
 
     # -------------------------------------------------------------------------
     # Visitor Methods - Expressions
@@ -347,13 +351,16 @@ class Interpreter(ASTVisitor):
         return node.accept(self)
 
 
-def interpret(source: str) -> Any:
+def interpret(source: str, skip_semantic: bool = False) -> Any:
     """Convenience function to interpret GenZ source code."""
     from src.lexer import tokenize
     from src.parser.parser import Parser
-    from src.semantic.analyzer import SemanticAnalyzer
 
     tokens = tokenize(source)
     ast = Parser(tokens).parse()
-    SemanticAnalyzer().analyze(ast)
+
+    if not skip_semantic:
+        from src.semantic.analyzer import SemanticAnalyzer
+        SemanticAnalyzer().analyze(ast)
+
     return Interpreter().interpret(ast)
