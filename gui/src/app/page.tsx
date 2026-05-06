@@ -290,17 +290,17 @@ export default function Home() {
 
       {/* Sidebar - File Explorer */}
       <aside className="w-64 bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
-        <div className="p-4 border-b border-zinc-900/50 flex flex-col gap-4">
+        <div className="p-4 border-b border-white/10 flex flex-col gap-4">
           <div className="flex items-center gap-2 px-1">
             <h2 className="text-base font-bold tracking-wide text-white uppercase">GenZCode</h2>
           </div>
           
           <div className="flex flex-col gap-1.5">
-            <button onClick={handleCreateFile} className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-md transition-colors w-full text-left">
+            <button onClick={handleCreateFile} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-200 hover:bg-white/5 px-3 py-2 rounded-md transition-colors w-full text-left">
               <FilePlus size={16} />
               New File
             </button>
-            <button onClick={() => setViewMode("docs")} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-md transition-colors w-full text-left ${viewMode === 'docs' ? 'bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5' : 'text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10'}`}>
+            <button onClick={() => setViewMode("docs")} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-md transition-colors w-full text-left ${viewMode === 'docs' ? 'bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'}`}>
               <Book size={16} />
               Documentation
             </button>
