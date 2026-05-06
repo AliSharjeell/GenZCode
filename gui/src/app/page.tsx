@@ -286,7 +286,7 @@ export default function Home() {
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_100%_100%,rgba(168,85,247,0.1),transparent_50%)]"></div>
 
       {/* Sidebar - File Explorer */}
-      <aside className="w-64 border-r border-white/[0.08] bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
+      <aside className="w-64 bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
         <div className="p-4 border-b border-zinc-900/50 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-medium tracking-wide text-zinc-300">EXPLORER</h2>
@@ -347,7 +347,7 @@ export default function Home() {
       <div className="flex-1 flex flex-col min-w-0 bg-transparent relative z-10">
 
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 shrink-0 border-b border-white/[0.08] bg-[#18181b]/50 backdrop-blur-3xl z-10">
+        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-[#18181b]/50 backdrop-blur-3xl z-10">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-base text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
               <FileCode2 size={16} className="text-zinc-400" />
