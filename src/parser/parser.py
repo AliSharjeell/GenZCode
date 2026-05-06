@@ -119,18 +119,28 @@ class Parser:
         elif self._match(TokenType.GOON):
             return self._goon_statement()
         elif self._match(TokenType.TUNG_TUNG_TUNG_SAHUR):
+            if self._match(TokenType.LPAREN):
+                self._consume(TokenType.RPAREN, "Expected ')' after 'tung_tung_tung_sahur'")
             self._consume(TokenType.SEMI, "Expected ';' after 'tung_tung_tung_sahur'")
             return PrintStmt(arguments=[Literal(value="Tung Tung Tung Sahur! Code is waking up...")])
         elif self._match(TokenType.SKIBIDI_TOILET):
+            if self._match(TokenType.LPAREN):
+                self._consume(TokenType.RPAREN, "Expected ')' after 'skibidi_toilet'")
             self._consume(TokenType.SEMI, "Expected ';' after 'skibidi_toilet'")
             return PrintStmt(arguments=[Literal(value="Memory flushed... clean as a whistle fr fr")])
         elif self._match(TokenType.OHIO):
+            if self._match(TokenType.LPAREN):
+                self._consume(TokenType.RPAREN, "Expected ')' after 'ohio'")
             self._consume(TokenType.SEMI, "Expected ';' after 'ohio'")
             return ExprStmt(expression=FuncCall(name="ohio", arguments=[]))
         elif self._match(TokenType.GRIMACE_SHAKE):
+            if self._match(TokenType.LPAREN):
+                self._consume(TokenType.RPAREN, "Expected ')' after 'grimace_shake'")
             self._consume(TokenType.SEMI, "Expected ';' after 'grimace_shake'")
             return ExprStmt(expression=FuncCall(name="grimace_shake", arguments=[]))
         elif self._match(TokenType.EDGE):
+            if self._match(TokenType.LPAREN):
+                self._consume(TokenType.RPAREN, "Expected ')' after 'edge'")
             self._consume(TokenType.SEMI, "Expected ';' after 'edge'")
             return PrintStmt(arguments=[Literal(value="Nearly there... edging the end...")])
         elif self._match(TokenType.SLAY):
