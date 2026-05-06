@@ -541,8 +541,8 @@ export default function Home() {
   return (
     <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-[#09090b] relative overflow-hidden">
       {/* Subtle colorful glows for the true Windows 11 Mica effect to blur */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_0%_0%,rgba(0,255,229,0.08),transparent_50%)]"></div>
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_100%_100%,rgba(0,229,255,0.05),transparent_50%)]"></div>
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_0%_0%,rgba(99,102,241,0.15),transparent_50%)]"></div>
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_100%_100%,rgba(168,85,247,0.1),transparent_50%)]"></div>
 
       {/* Sidebar - File Explorer */}
       <aside className="w-64 bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
