@@ -105,11 +105,35 @@ export const genzDocs: DocEntry[] = [
     category: "Types"
   },
   {
-    id: "bool",
-    title: "bool",
-    aliases: ["boolean", "true", "false", "condition"],
-    description: "The boolean data type. Can be literally 'true' or 'false'.",
-    example: `lowkey is_valid: bool = true;`,
+    id: "no_cap",
+    title: "no_cap",
+    aliases: ["true", "boolean", "yes", "valid"],
+    description: "The literal value for 'true' in GenZCode.",
+    example: `lowkey is_sigma: num = no_cap;`,
     category: "Types"
+  },
+  {
+    id: "fr_fr",
+    title: "fr_fr",
+    aliases: ["false", "boolean", "no", "invalid"],
+    description: "The literal value for 'false' in GenZCode.",
+    example: `lowkey is_mid: num = fr_fr;`,
+    category: "Types"
+  },
+  {
+    id: "bet",
+    title: "bet",
+    aliases: ["case", "match", "option"],
+    description: "A 'case' inside a 'ratio' (switch) block.",
+    example: `bet "A": {\n    spill_tea("W");\n}`,
+    category: "Control Flow"
+  },
+  {
+    id: "nvm",
+    title: "nvm",
+    aliases: ["default", "else", "fallback"],
+    description: "The 'default' case inside a 'ratio' (switch) block if no other 'bet' matches.",
+    example: `nvm: {\n    spill_tea("L");\n}`,
+    category: "Control Flow"
   }
 ];

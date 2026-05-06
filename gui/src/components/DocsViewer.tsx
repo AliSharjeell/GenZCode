@@ -12,7 +12,7 @@ export default function DocsViewer() {
       {/* Docs Header & Search */}
       <div className="p-8 border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-medium text-white mb-8 flex items-center gap-3">
+          <h1 className="text-3xl font-medium text-white mb-8 flex items-center justify-center gap-3">
             GenZCode Documentation
           </h1>
           
