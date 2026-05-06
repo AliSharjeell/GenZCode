@@ -142,15 +142,16 @@ export default function Home() {
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto py-2">
-          {files.map(file => (
-            <div
-              key={file.id}
-              onClick={() => setActiveFileId(file.id)}
-              className={`w-full text-left px-4 py-2.5 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group ${
-                activeFileId === file.id ? "bg-zinc-900 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-300"
-              }`}
-            >
+        <div className="flex-1 overflow-y-auto py-3 px-3">
+          <div className="flex flex-col gap-1">
+            {files.map(file => (
+              <div
+                key={file.id}
+                onClick={() => setActiveFileId(file.id)}
+                className={`w-full text-left px-3 py-2 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${
+                  activeFileId === file.id ? "bg-zinc-900/80 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-300"
+                }`}
+              >
               <div className="flex items-center gap-2 overflow-hidden w-full">
                 <FileCode2 size={16} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
                 {editingFileId === file.id ? (
@@ -184,6 +185,7 @@ export default function Home() {
               )}
             </div>
           ))}
+          </div>
         </div>
       </aside>
 
