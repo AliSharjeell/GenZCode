@@ -131,9 +131,6 @@ export default function Home() {
       <aside className="w-64 border-r border-zinc-900 bg-[#09090b] flex flex-col shrink-0">
         <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-zinc-100 text-zinc-950 flex items-center justify-center font-bold text-xs">
-              G
-            </div>
             <h2 className="text-sm font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
           </div>
           <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
