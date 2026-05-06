@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor, { Monaco } from "@monaco-editor/react";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
 
@@ -23,14 +23,11 @@ vibe_check greet() {
 }`;
 
 export default function Home() {
-  const monaco = useMonaco();
   const [code, setCode] = useState(defaultCode);
 
-  useEffect(() => {
-    if (monaco) {
-      setupGenZLanguage(monaco);
-    }
-  }, [monaco]);
+  const handleEditorWillMount = (monaco: Monaco) => {
+    setupGenZLanguage(monaco);
+  };
 
   const handleEditorChange = (value: string | undefined) => {
     if (value) setCode(value);
@@ -71,10 +68,11 @@ export default function Home() {
             theme="genzDark"
             value={code}
             onChange={handleEditorChange}
+            beforeMount={handleEditorWillMount}
             options={{
               minimap: { enabled: false },
               fontSize: 14,
-              fontFamily: "'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+              fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
               lineHeight: 1.6,
               padding: { top: 24, bottom: 24 },
               scrollBeyondLastLine: false,
