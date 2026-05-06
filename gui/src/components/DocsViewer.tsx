@@ -12,13 +12,12 @@ export default function DocsViewer() {
       {/* Docs Header & Search */}
       <div className="p-8 border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+          <h1 className="text-3xl font-medium text-white mb-8 flex items-center gap-3">
             GenZCode Documentation
           </h1>
-          <p className="text-zinc-400 mb-8">Search for standard programming concepts (like "print" or "if") to find their GenZCode equivalents, or just browse the terms.</p>
           
           <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-indigo-400 transition-colors">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-zinc-300 transition-colors">
               <Search size={20} />
             </div>
             <input
@@ -26,7 +25,7 @@ export default function DocsViewer() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search docs (e.g., 'print', 'array', 'loop')..."
-              className="w-full bg-[#18181b]/50 border border-white/10 rounded-full py-4 pl-12 pr-4 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-inner backdrop-blur-xl"
+              className="w-full bg-[#18181b]/50 border border-white/10 rounded-full py-4 pl-12 pr-4 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-white/10 focus:border-white/10 transition-all shadow-inner backdrop-blur-xl"
             />
           </div>
         </div>
