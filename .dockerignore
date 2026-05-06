@@ -1,0 +1,10 @@
+.git
+.gitignore
+.omc
+.pytest_cache
+__pycache__
+gui/node_modules
+gui/.next
+node_modules
+.next
+tests/
