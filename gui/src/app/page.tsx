@@ -280,10 +280,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950">
+    <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-[#09090b] relative overflow-hidden">
+      {/* Subtle colorful glows for the true Windows 11 Mica effect to blur */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_0%_0%,rgba(99,102,241,0.15),transparent_50%)]"></div>
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_100%_100%,rgba(168,85,247,0.1),transparent_50%)]"></div>
 
       {/* Sidebar - File Explorer */}
-      <aside className="w-64 border-r border-white/5 bg-transparent flex flex-col shrink-0">
+      <aside className="w-64 border-r border-white/[0.08] bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
         <div className="p-4 border-b border-zinc-900/50 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-base font-medium tracking-wide text-zinc-300">EXPLORER</h2>
@@ -299,8 +302,9 @@ export default function Home() {
               <div
                 key={file.id}
                 onClick={() => setActiveFileId(file.id)}
-                className={`w-full text-left px-3 py-2 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${activeFileId === file.id ? "bg-zinc-900/80 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-300"
-                  }`}
+                className={`w-full text-left px-3 py-2 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${
+                  activeFileId === file.id ? "bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5" : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                }`}
               >
                 <div className="flex items-center gap-2 overflow-hidden w-full">
                   <FileCode2 size={16} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
@@ -340,10 +344,10 @@ export default function Home() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-transparent">
+      <div className="flex-1 flex flex-col min-w-0 bg-transparent relative z-10">
 
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-transparent">
+        <header className="flex items-center justify-between px-6 py-3 shrink-0 border-b border-white/[0.08] bg-[#18181b]/50 backdrop-blur-3xl z-10">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-base text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
               <FileCode2 size={16} className="text-zinc-400" />
