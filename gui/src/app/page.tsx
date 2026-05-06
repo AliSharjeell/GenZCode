@@ -52,6 +52,157 @@ sus (aura > 50) {
 
 ballerina_cappuccina;
 `
+  },
+  {
+    id: "4",
+    name: "fizzbuzz.genz",
+    content: `// Classic FizzBuzz in GenZCode
+lowkey i: num = 1;
+lowkey max: num = 20;
+
+spill_tea("Starting FizzBuzz up to", max);
+
+keep_yapping (i <= max) {
+    sus (i % 15 == 0) {
+        spill_tea("FizzBuzz");
+    } deadass sus (i % 3 == 0) {
+        spill_tea("Fizz");
+    } deadass sus (i % 5 == 0) {
+        spill_tea("Buzz");
+    } deadass {
+        spill_tea(i);
+    }
+    i = i + 1;
+}
+`
+  },
+  {
+    id: "5",
+    name: "functions.genz",
+    content: `// Functions (vibe_checks) in GenZCode
+vibe_check calculate_rizz(score: num, bonus: num) {
+    lowkey total: num = score + bonus;
+    
+    sus (total > 100) {
+        spill_tea("Unattainable rizz levels detected.");
+        slay total;
+    } deadass {
+        spill_tea("Average rizz.");
+        slay total;
+    }
+}
+
+lowkey my_rizz: num = calculate_rizz(80, 30);
+spill_tea("Final rizz score:", my_rizz);
+`
+  },
+  {
+    id: "6",
+    name: "loops.genz",
+    content: `// Demonstrating the keep_yapping loop
+lowkey count: num = 0;
+
+spill_tea("Starting the count...");
+
+keep_yapping (count < 10) {
+    count = count + 1;
+    
+    sus (count == 5) {
+        spill_tea("Halfway there! Skipping 5...");
+        next_up;
+    }
+    
+    spill_tea("Current count is:", count);
+}
+
+spill_tea("Done yapping!");
+`
+  },
+  {
+    id: "7",
+    name: "switch.genz",
+    content: `// Using ratio and bet (switch/case)
+lowkey grade: txt = "B";
+
+ratio (grade) {
+    bet "A": {
+        spill_tea("W grade, no cap");
+        bounce;
+    }
+    bet "B": {
+        spill_tea("Not bad, valid");
+        bounce;
+    }
+    bet "C": {
+        spill_tea("Bro fell off");
+        bounce;
+    }
+    nvm: {
+        spill_tea("L + ratio + failed");
+        bounce;
+    }
+}
+`
+  },
+  {
+    id: "8",
+    name: "arrays.genz",
+    content: `// Array basics in GenZCode
+lowkey scores: num[] = [100, 95, 80, 42];
+
+spill_tea("First score:", scores[0]);
+
+// Modify an element
+scores[3] = 69;
+spill_tea("Modified last score:", scores[3]);
+
+// Loop over array (using index)
+lowkey i: num = 0;
+keep_yapping (i < 4) {
+    spill_tea("Score at index", i, "is", scores[i]);
+    i = i + 1;
+}
+`
+  },
+  {
+    id: "9",
+    name: "factorial.genz",
+    content: `// Calculating Factorial using recursion
+vibe_check factorial(n: num) {
+    sus (n == 0) {
+        slay 1;
+    } deadass {
+        slay n * factorial(n - 1);
+    }
+}
+
+lowkey num_to_check: num = 5;
+lowkey result: num = factorial(num_to_check);
+
+spill_tea("The factorial of", num_to_check, "is", result);
+`
+  },
+  {
+    id: "10",
+    name: "fibonacci.genz",
+    content: `// Generating the Fibonacci sequence
+vibe_check fib(n: num) {
+    sus (n <= 1) {
+        slay n;
+    }
+    slay fib(n - 1) + fib(n - 2);
+}
+
+lowkey terms: num = 10;
+lowkey i: num = 0;
+
+spill_tea("Fibonacci Sequence up to", terms, "terms:");
+
+keep_yapping (i < terms) {
+    spill_tea("Term", i, "->", fib(i));
+    i = i + 1;
+}
+`
   }
 ];
 
