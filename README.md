@@ -85,6 +85,17 @@ lowkey is_sus: num = fr_fr;        // false
 | `nvm` | `default` | Default case |
 | `no_cap` | `true` | Boolean true |
 | `fr_fr` | `false` | Boolean false |
+| `goon` | `while true` | Enter an infinite loop |
+| `rizz` | `add/mutate` | Mutates or returns numeric with +10.0 |
+| `fanum_tax` | `sub/mutate` | Mutates or returns numeric with -20% tax |
+| `mewing` | `sleep` | Pauses execution / Suspends thread |
+| `skibidi` | `evil/loop` | Evil loop or bad condition state |
+| `skibidi_toilet` | `garbage collect` | Cleans up and flushes virtual memory |
+| `tung_tung_tung_sahur` | `initialize` | Wake up / Initialize execution |
+| `ballerina_cappuccina` | `fancy exit` | Gracefully exit or return a fancy string |
+| `ohio` | `runtime error` | Trigger chaotic state runtime exception |
+| `grimace_shake` | `fatal error` | Trigger fatal poison crash exception |
+| `edge` | `yield` | Process edging towards completion |
 
 ## Built-in Functions
 
