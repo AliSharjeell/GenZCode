@@ -129,7 +129,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-gradient-to-br from-zinc-600 via-zinc-800 to-zinc-950">
+    <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-gradient-to-br from-zinc-700 via-zinc-800 to-zinc-950">
       
       {/* Sidebar - File Explorer */}
       <aside className="w-64 border-r border-white/5 bg-transparent flex flex-col shrink-0">
