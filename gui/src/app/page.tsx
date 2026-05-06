@@ -197,11 +197,267 @@ vibe_check fib(n: num) {
 lowkey terms: num = 10;
 lowkey i: num = 0;
 
-spill_tea("Fibonacci Sequence up to", terms, "terms:");
-
-keep_yapping (i < terms) {
+    keep_yapping (i < terms) {
     spill_tea("Term", i, "->", fib(i));
     i = i + 1;
+}
+`
+  },
+  {
+    id: "11",
+    name: "even_odd.genz",
+    content: `// Odd/Even Vibe Checker
+lowkey x: num = 17;
+sus (x % 2 == 0) {
+    spill_tea(x, "has clean vibes (Even)");
+} deadass {
+    spill_tea(x, "has sketchy vibes (Odd)");
+}
+`
+  },
+  {
+    id: "12",
+    name: "taxation.genz",
+    content: `// Fanum tax demonstration
+lowkey purse: num = 500;
+spill_tea("Purse before tax:", purse);
+fanum_tax(purse); // Mutates purse directly to 80%
+spill_tea("Purse after tax:", purse);
+`
+  },
+  {
+    id: "13",
+    name: "rizzer.genz",
+    content: `// Rizz upgrade simulation
+lowkey charm: num = 75;
+spill_tea("Starting charm:", charm);
+rizz(charm); // Adds 10.0 charisma in-place
+spill_tea("Charm level boosted:", charm);
+`
+  },
+  {
+    id: "14",
+    name: "mewing_sleep.genz",
+    content: `// Silent mewing test
+spill_tea("Start speaking...");
+mewing(2); // Wait/sleep for 2 seconds
+spill_tea("Mewing streak kept in absolute silence.");
+`
+  },
+  {
+    id: "15",
+    name: "infinite_goon.genz",
+    content: `// Goon infinite loop with a bounce
+lowkey loops: num = 0;
+goon {
+    loops = loops + 1;
+    spill_tea("Gooning loop count:", loops);
+    sus (loops >= 3) {
+        spill_tea("Max gooning reached, bouncing!");
+        bounce;
+    }
+}
+`
+  },
+  {
+    id: "16",
+    name: "ohio_check.genz",
+    content: `// Ohio weird state error trigger
+lowkey place: txt = "Ohio";
+sus (place == "Ohio") {
+    spill_tea("Entering the state of Ohio...");
+    ohio(); // Triggers a real runtime exception!
+}
+`
+  },
+  {
+    id: "17",
+    name: "grimace_poison.genz",
+    content: `// Poison fatal crash trigger
+lowkey beverage: txt = "Grimace Shake";
+sus (beverage == "Grimace Shake") {
+    spill_tea("Gulp gulp gulp...");
+    grimace_shake(); // Fatal crash trigger!
+}
+`
+  },
+  {
+    id: "18",
+    name: "sahur_wake.genz",
+    content: `// Initialization trigger
+tung_tung_tung_sahur; // Prints waking up message
+spill_tea("We are awake and coding, no cap.");
+`
+  },
+  {
+    id: "19",
+    name: "cappuccino_fancy.genz",
+    content: `// Graceful ballerina cappuccino return
+lowkey beverage: txt = ballerina_cappuccina();
+spill_tea("My morning drink is:", beverage);
+`
+  },
+  {
+    id: "20",
+    name: "array_average.genz",
+    content: `// Calculating average of array
+lowkey marks: num[] = [80, 90, 100, 70];
+lowkey sum: num = 0;
+lowkey idx: num = 0;
+
+keep_yapping (idx < 4) {
+    sum = sum + marks[idx];
+    idx = idx + 1;
+}
+
+lowkey avg: num = sum / 4;
+spill_tea("Sum:", sum, "| Average:", avg);
+`
+  },
+  {
+    id: "21",
+    name: "countdown.genz",
+    content: `// Countdown keep_yapping loop
+lowkey count: num = 5;
+keep_yapping (count > 0) {
+    spill_tea("T-Minus", count);
+    count = count - 1;
+}
+spill_tea("Blast off! Slay!");
+`
+  },
+  {
+    id: "22",
+    name: "prime_test.genz",
+    content: `// Simple prime number check
+lowkey val: num = 7;
+lowkey divisor: num = 2;
+lowkey is_prime: num = no_cap;
+
+keep_yapping (divisor < val) {
+    sus (val % divisor == 0) {
+        is_prime = fr_fr;
+    }
+    divisor = divisor + 1;
+}
+
+sus (is_prime) {
+    spill_tea(val, "is a prime number, fr fr");
+} deadass {
+    spill_tea(val, "is not prime, L ratio");
+}
+`
+  },
+  {
+    id: "23",
+    name: "min_max.genz",
+    content: `// Find min and max in an array
+lowkey prices: num[] = [45, 12, 99, 3];
+lowkey min_val: num = prices[0];
+lowkey max_val: num = prices[0];
+lowkey idx: num = 1;
+
+keep_yapping (idx < 4) {
+    sus (prices[idx] < min_val) {
+        min_val = prices[idx];
+    }
+    sus (prices[idx] > max_val) {
+        max_val = prices[idx];
+    }
+    idx = idx + 1;
+}
+
+spill_tea("Min price:", min_val, "| Max price:", max_val);
+`
+  },
+  {
+    id: "24",
+    name: "power_calc.genz",
+    content: `// Evaluating exponential power
+lowkey base: num = 2;
+lowkey exp: num = 5;
+lowkey res: num = 1;
+lowkey i: num = 0;
+
+keep_yapping (i < exp) {
+    res = res * base;
+    i = i + 1;
+}
+
+spill_tea(base, "to the power of", exp, "is", res);
+`
+  },
+  {
+    id: "25",
+    name: "absolute_val.genz",
+    content: `// Computing absolute value
+lowkey temp: num = -42;
+lowkey abs_temp: num = temp;
+sus (temp < 0) {
+    abs_temp = 0 - temp;
+}
+spill_tea("The absolute value of", temp, "is", abs_temp);
+`
+  },
+  {
+    id: "26",
+    name: "simple_gc.genz",
+    content: `// Virtual memory flush demo
+spill_tea("Processing heavy loads...");
+skibidi_toilet; // Flush virtual memory
+spill_tea("System fully optimized and cleaned.");
+`
+  },
+  {
+    id: "27",
+    name: "status_edge.genz",
+    content: `// Yield edging progress check
+spill_tea("Loading complete system files...");
+edge; // Yield / Almost finish
+spill_tea("Process finished with maximum edging.");
+`
+  },
+  {
+    id: "28",
+    name: "vibe_grader.genz",
+    content: `// Vibe grading score
+lowkey score: num = 88;
+sus (score >= 90) {
+    spill_tea("Grade: Elite Vibe");
+} deadass sus (score >= 70) {
+    spill_tea("Grade: Certified Valid Vibe");
+} deadass {
+    spill_tea("Grade: Depressed Vibe, L");
+}
+`
+  },
+  {
+    id: "29",
+    name: "array_sum.genz",
+    content: `// Sum of all items in array
+lowkey levels: num[] = [10, 20, 30, 40, 50];
+lowkey total_sum: num = 0;
+lowkey idx: num = 0;
+
+keep_yapping (idx < 5) {
+    total_sum = total_sum + levels[idx];
+    idx = idx + 1;
+}
+
+spill_tea("Combined level scores total:", total_sum);
+`
+  },
+  {
+    id: "30",
+    name: "boolean_checks.genz",
+    content: `// Boolean truths vs lies
+lowkey cap_level: num = no_cap;
+lowkey cap_lie: num = fr_fr;
+
+sus (cap_level && !cap_lie) {
+    spill_tea("Truth prevails! Slay.");
+} deadass {
+    spill_tea("Cap detected!");
 }
 `
   }
