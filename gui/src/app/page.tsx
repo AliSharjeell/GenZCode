@@ -365,7 +365,7 @@ export default function Home() {
         </header>
 
         {/* Editor and Output Container */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-[#09090b]">
+        <div className="flex-1 flex flex-col overflow-hidden bg-[#09090b] rounded-tl-xl border-t border-l border-zinc-800/50 shadow-2xl">
 
           {/* Editor */}
           <main className="flex-1 overflow-hidden relative">
