@@ -1,4 +1,3 @@
-# GenZ/Brainrot Programming Language
 
 ![GenZCode Studio Banner](images/Frame%20337453.png)
 
