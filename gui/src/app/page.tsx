@@ -213,6 +213,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<"editor" | "docs">("editor");
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
@@ -235,6 +236,7 @@ export default function Home() {
     };
     setFiles([...files, newFile]);
     setActiveFileId(newId);
+    setViewMode("editor");
   };
 
   const handleDeleteFile = (id: string, e: React.MouseEvent) => {
@@ -297,7 +299,7 @@ export default function Home() {
               <FilePlus size={16} />
               New File
             </button>
-            <button onClick={() => {}} className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-md transition-colors w-full text-left">
+            <button onClick={() => setViewMode("docs")} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-md transition-colors w-full text-left ${viewMode === 'docs' ? 'bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5' : 'text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10'}`}>
               <Book size={16} />
               Documentation
             </button>
@@ -309,9 +311,9 @@ export default function Home() {
             {files.map(file => (
               <div
                 key={file.id}
-                onClick={() => setActiveFileId(file.id)}
-                className={`w-full text-left px-3 py-2 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${
-                  activeFileId === file.id ? "bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5" : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                onClick={() => { setActiveFileId(file.id); setViewMode("editor"); }}
+                className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${
+                  activeFileId === file.id && viewMode === "editor" ? "bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5" : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                 }`}
               >
                 <div className="flex items-center gap-2 overflow-hidden w-full">
