@@ -35,12 +35,16 @@ spill_tea("Result is:", result);
     id: "3",
     name: "brainrot.genz",
     content: `// Extreme brainrot example
-tung_tung_tung_sahur
+lowkey tung_tung_tung_sahur: num = 1;
+lowkey skibidi_toilet: txt = "ohio";
+lowkey grimace_shake: num = 0;
+lowkey ballerina_cappuccina: num = 1;
 
 lowkey aura: num = 100;
 
 sus (aura > 50) {
     spill_tea("W rizz");
+    tung_tung_tung_sahur;
 } deadass {
     skibidi_toilet;
     grimace_shake;
@@ -125,10 +129,10 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800">
+    <div className="flex h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-zinc-950">
       
       {/* Sidebar - File Explorer */}
-      <aside className="w-64 border-r border-zinc-900 bg-[#09090b] flex flex-col shrink-0">
+      <aside className="w-64 border-r border-zinc-900 bg-zinc-900/30 backdrop-blur-2xl flex flex-col shrink-0 shadow-xl">
         <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
