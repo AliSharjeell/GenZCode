@@ -292,7 +292,7 @@ export default function Home() {
       <aside className="w-64 bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
         <div className="p-4 border-b border-white/10 flex flex-col gap-4">
           <div className="flex items-center gap-2 px-1">
-            <h2 className="text-base font-bold tracking-wide text-white uppercase">GenZCode</h2>
+            <h2 className="text-base font-medium tracking-wide text-white uppercase">GenZCode</h2>
           </div>
           
           <div className="flex flex-col gap-1.5">
@@ -358,13 +358,14 @@ export default function Home() {
       <div className="flex-1 flex flex-col min-w-0 bg-transparent relative z-10">
 
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-[#18181b]/50 backdrop-blur-3xl z-10">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-base text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
-              <FileCode2 size={16} className="text-zinc-400" />
-              <span className="font-mono">{activeFile.name}</span>
-            </div>
+        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-[#18181b]/50 backdrop-blur-3xl z-10 relative">
+          <div className="flex-1"></div>
+          
+          <div className="absolute left-1/2 -translate-x-1/2 text-sm text-zinc-300 font-normal">
+            {activeFile.name}
           </div>
+
+          <div className="flex-1 flex justify-end">
           <Button
             onClick={handleRun}
             disabled={isRunning}
@@ -373,6 +374,7 @@ export default function Home() {
             <Play size={16} fill="currentColor" />
             {isRunning ? "Running..." : "Run Code"}
           </Button>
+          </div>
         </header>
 
           {/* Content Area (Editor or Docs) */}
