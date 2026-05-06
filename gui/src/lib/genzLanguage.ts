@@ -9,7 +9,10 @@ export function setupGenZLanguage(monaco: Monaco) {
     keywords: [
       "lowkey", "num", "txt", "sus", "deadass", "keep_yapping",
       "spill_tea", "vibe_check", "slay", "bounce", "next_up",
-      "ratio", "bet", "nvm", "no_cap", "fr_fr"
+      "ratio", "bet", "nvm", "no_cap", "fr_fr",
+      "tung_tung_tung_sahur", "ballerina_cappuccina", "skibidi_toilet",
+      "skibidi", "fanum_tax", "rizz", "ohio", "mewing", "grimace_shake",
+      "goon", "edge"
     ],
     operators: [
       "=", ">", "<", "!", "~", "?", ":", "==", "<=", ">=", "!=",
@@ -28,7 +31,7 @@ export function setupGenZLanguage(monaco: Monaco) {
 
   // Autocompletion (Intellisense)
   monaco.languages.registerCompletionItemProvider("genz", {
-    provideCompletionItems: (model, position) => {
+    provideCompletionItems: (model: any, position: any) => {
       const suggestions = [
         { label: "lowkey", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "lowkey ", detail: "Variable declaration" },
         { label: "num", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "num", detail: "Numeric type" },
@@ -46,6 +49,17 @@ export function setupGenZLanguage(monaco: Monaco) {
         { label: "nvm", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "nvm: {\n\t$0\n}", insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, detail: "Default case" },
         { label: "no_cap", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "no_cap", detail: "Boolean true" },
         { label: "fr_fr", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "fr_fr", detail: "Boolean false" },
+        { label: "tung_tung_tung_sahur", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "tung_tung_tung_sahur", detail: "Wake up / Initialize" },
+        { label: "ballerina_cappuccina", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "ballerina_cappuccina", detail: "Graceful exit / Fancy string" },
+        { label: "skibidi_toilet", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "skibidi_toilet", detail: "Garbage collection / flush" },
+        { label: "skibidi", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "skibidi", detail: "Bad / Evil / Loop" },
+        { label: "fanum_tax", kind: monaco.languages.CompletionItemKind.Function, insertText: "fanum_tax(${1:value})", insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, detail: "Steal / Subtraction" },
+        { label: "rizz", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "rizz", detail: "Charisma / Add / Success" },
+        { label: "ohio", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "ohio", detail: "Weird state / Error" },
+        { label: "mewing", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "mewing", detail: "Silence / Sleep / Wait" },
+        { label: "grimace_shake", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "grimace_shake", detail: "Fatal error / Poison" },
+        { label: "goon", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "goon", detail: "Infinite loop" },
+        { label: "edge", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "edge", detail: "Almost finish / Yield" },
       ];
       return { suggestions };
     }
@@ -53,7 +67,7 @@ export function setupGenZLanguage(monaco: Monaco) {
 
   // Documentation Hovers
   monaco.languages.registerHoverProvider("genz", {
-    provideHover: (model, position) => {
+    provideHover: (model: any, position: any) => {
       const word = model.getWordAtPosition(position);
       if (!word) return null;
       
@@ -73,7 +87,18 @@ export function setupGenZLanguage(monaco: Monaco) {
         "num": "### `num`\nNumeric data type.",
         "txt": "### `txt`\nString data type.",
         "bounce": "### `bounce`\nBreaks out of the current loop.",
-        "next_up": "### `next_up`\nSkips the rest of the current iteration and continues to the next."
+        "next_up": "### `next_up`\nSkips the rest of the current iteration and continues to the next.",
+        "tung_tung_tung_sahur": "### `tung_tung_tung_sahur`\nTime to wake up your code. Initialize or start a process.",
+        "ballerina_cappuccina": "### `ballerina_cappuccina`\nA graceful and fancy operation.",
+        "skibidi_toilet": "### `skibidi_toilet`\nFlushes the memory or garbage collection.",
+        "skibidi": "### `skibidi`\nSomething chaotic or evil.",
+        "fanum_tax": "### `fanum_tax`\nSteals a percentage of a variable's value.",
+        "rizz": "### `rizz`\nCharisma. Often used to charm a function into returning true.",
+        "ohio": "### `ohio`\nA chaotic state or error condition.",
+        "mewing": "### `mewing`\nSilences the output or pauses execution.",
+        "grimace_shake": "### `grimace_shake`\nTriggers a fatal error or crash.",
+        "goon": "### `goon`\nEnter an infinite loop.",
+        "edge": "### `edge`\nYields the current process, coming close to the end but not quite."
       };
       
       if (docs[word.word]) {
