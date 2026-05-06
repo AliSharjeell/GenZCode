@@ -4,7 +4,7 @@ import { useState } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
-import { FileCode2, Plus, Terminal, Play, Trash2, Edit2 } from "lucide-react";
+import { FileCode2, Plus, Terminal, Play, Trash2, Edit2, Book, FilePlus } from "lucide-react";
 
 type FileData = {
   id: string;
@@ -287,13 +287,21 @@ export default function Home() {
 
       {/* Sidebar - File Explorer */}
       <aside className="w-64 bg-[#18181b]/50 backdrop-blur-3xl flex flex-col shrink-0 relative z-20">
-        <div className="p-4 border-b border-zinc-900/50 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-medium tracking-wide text-zinc-300">EXPLORER</h2>
+        <div className="p-4 border-b border-zinc-900/50 flex flex-col gap-4">
+          <div className="flex items-center gap-2 px-1">
+            <h2 className="text-base font-bold tracking-wide text-white uppercase">GenZCode</h2>
           </div>
-          <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
-            <Plus size={18} />
-          </button>
+          
+          <div className="flex flex-col gap-1.5">
+            <button onClick={handleCreateFile} className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-md transition-colors w-full text-left">
+              <FilePlus size={16} />
+              New File
+            </button>
+            <button onClick={() => {}} className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-2 rounded-md transition-colors w-full text-left">
+              <Book size={16} />
+              Documentation
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto py-3 px-3">
