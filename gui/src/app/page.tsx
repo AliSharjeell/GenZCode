@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
+import DocsViewer from "@/components/DocsViewer";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
 import { FileCode2, Plus, Terminal, Play, Trash2, Edit2, Book, FilePlus } from "lucide-react";
@@ -374,46 +375,51 @@ export default function Home() {
           </Button>
         </header>
 
-        {/* Editor and Output Container */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-[#09090b] rounded-tl-xl border-t border-l border-zinc-800/50 shadow-2xl">
+          {/* Content Area (Editor or Docs) */}
+          {viewMode === "editor" ? (
+            <div className="flex-1 flex flex-col overflow-hidden bg-[#09090b] rounded-tl-xl border-t border-l border-zinc-800/50 shadow-2xl">
 
-          {/* Editor */}
-          <main className="flex-1 overflow-hidden relative">
-            <Editor
-              height="100%"
-              language="genz"
-              theme="genzDark"
-              value={activeFile.content}
-              onChange={handleEditorChange}
-              beforeMount={handleEditorWillMount}
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
-                lineHeight: 1.6,
-                padding: { top: 16, bottom: 16 },
-                scrollBeyondLastLine: false,
-                smoothScrolling: true,
-                cursorBlinking: "smooth",
-                cursorSmoothCaretAnimation: "on",
-                formatOnPaste: true,
-                renderLineHighlight: "all",
-              }}
-            />
-          </main>
+              {/* Editor */}
+              <main className="flex-1 overflow-hidden relative">
+                <Editor
+                  height="100%"
+                  language="genz"
+                  theme="genzDark"
+                  value={activeFile.content}
+                  onChange={handleEditorChange}
+                  beforeMount={handleEditorWillMount}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
+                    lineHeight: 1.6,
+                    padding: { top: 16, bottom: 16 },
+                    scrollBeyondLastLine: false,
+                    smoothScrolling: true,
+                    cursorBlinking: "smooth",
+                    cursorSmoothCaretAnimation: "on",
+                    formatOnPaste: true,
+                    renderLineHighlight: "all",
+                  }}
+                />
+              </main>
 
-          {/* Output Panel */}
-          <div className="h-64 border-t border-zinc-900 bg-[#050505] flex flex-col shrink-0 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-            <div className="px-4 py-2 border-b border-zinc-900 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-zinc-950/80 uppercase tracking-wider">
-              <Terminal size={12} />
-              Output
+              {/* Output Panel */}
+              <div className="h-64 border-t border-white/5 bg-[#050505] flex flex-col shrink-0 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-[#0a0a0a] uppercase tracking-wider">
+                  <Terminal size={12} />
+                  Output
+                </div>
+                <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
+                  {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
+                </div>
+              </div>
             </div>
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
-              {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
-            </div>
-          </div>
+          ) : (
+            <DocsViewer />
+          )}
+
         </div>
-
       </div>
     </div>
   );
