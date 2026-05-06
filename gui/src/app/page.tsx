@@ -369,9 +369,9 @@ export default function Home() {
           <Button
             onClick={handleRun}
             disabled={isRunning}
-            className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800 border border-zinc-700 transition-colors font-normal px-5 h-9 rounded-md shadow-sm flex items-center gap-2"
+            className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800 border border-zinc-700 transition-colors font-normal text-xs px-3 h-8 rounded-md shadow-sm flex items-center gap-1.5"
           >
-            <Play size={16} fill="currentColor" />
+            <Play size={14} fill="currentColor" />
             {isRunning ? "Running..." : "Run Code"}
           </Button>
           </div>
