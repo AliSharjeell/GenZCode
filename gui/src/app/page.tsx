@@ -129,10 +129,10 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-zinc-950">
+    <div className="flex h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-800/20 via-zinc-950 to-zinc-950 backdrop-blur-3xl">
       
       {/* Sidebar - File Explorer */}
-      <aside className="w-64 border-r border-zinc-900 bg-zinc-900/30 backdrop-blur-2xl flex flex-col shrink-0 shadow-xl">
+      <aside className="w-64 border-r border-white/5 bg-transparent flex flex-col shrink-0">
         <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
@@ -188,10 +188,10 @@ export default function Home() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-zinc-950">
+      <div className="flex-1 flex flex-col min-w-0 bg-transparent">
         
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-900 bg-zinc-950 shrink-0">
+        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-transparent">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
               <FileCode2 size={14} className="text-zinc-400" />
@@ -208,39 +208,43 @@ export default function Home() {
           </Button>
         </header>
 
-        {/* Editor */}
-        <main className="flex-1 overflow-hidden relative">
-          <Editor
-            height="100%"
-            language="genz"
-            theme="genzDark"
-            value={activeFile.content}
-            onChange={handleEditorChange}
-            beforeMount={handleEditorWillMount}
-            options={{
-              minimap: { enabled: false },
-              fontSize: 14,
-              fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
-              lineHeight: 1.6,
-              padding: { top: 16, bottom: 16 },
-              scrollBeyondLastLine: false,
-              smoothScrolling: true,
-              cursorBlinking: "smooth",
-              cursorSmoothCaretAnimation: "on",
-              formatOnPaste: true,
-              renderLineHighlight: "all",
-            }}
-          />
-        </main>
+        {/* Editor and Output Container */}
+        <div className="flex-1 flex flex-col mx-4 mb-4 overflow-hidden rounded-xl border border-zinc-800/50 shadow-2xl bg-[#09090b] ring-1 ring-black/50">
+          
+          {/* Editor */}
+          <main className="flex-1 overflow-hidden relative">
+            <Editor
+              height="100%"
+              language="genz"
+              theme="genzDark"
+              value={activeFile.content}
+              onChange={handleEditorChange}
+              beforeMount={handleEditorWillMount}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 14,
+                fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
+                lineHeight: 1.6,
+                padding: { top: 16, bottom: 16 },
+                scrollBeyondLastLine: false,
+                smoothScrolling: true,
+                cursorBlinking: "smooth",
+                cursorSmoothCaretAnimation: "on",
+                formatOnPaste: true,
+                renderLineHighlight: "all",
+              }}
+            />
+          </main>
 
-        {/* Output Panel */}
-        <div className="h-64 border-t border-zinc-900 bg-[#09090b] flex flex-col shrink-0">
-          <div className="px-4 py-2 border-b border-zinc-900 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-zinc-950/50 uppercase tracking-wider">
-            <Terminal size={12} />
-            Output
-          </div>
-          <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
-            {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
+          {/* Output Panel */}
+          <div className="h-64 border-t border-zinc-900 bg-[#050505] flex flex-col shrink-0 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+            <div className="px-4 py-2 border-b border-zinc-900 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-zinc-950/80 uppercase tracking-wider">
+              <Terminal size={12} />
+              Output
+            </div>
+            <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
+              {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
+            </div>
           </div>
         </div>
 
