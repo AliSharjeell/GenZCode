@@ -16,5 +16,5 @@ COPY . .
 # Expose Next.js default port
 EXPOSE 3000
 
-# Run in development mode
-CMD ["npm", "run", "dev"]
+# Run in development mode, explicitly listening on 0.0.0.0 for external container routing
+CMD ["npm", "run", "dev", "--", "-H", "0.0.0.0"]
