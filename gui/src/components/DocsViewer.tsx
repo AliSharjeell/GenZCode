@@ -13,7 +13,6 @@ export default function DocsViewer() {
       <div className="p-8 border-b border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-            <BookOpen className="text-indigo-400" size={28} />
             GenZCode Documentation
           </h1>
           <p className="text-zinc-400 mb-8">Search for standard programming concepts (like "print" or "if") to find their GenZCode equivalents, or just browse the terms.</p>
@@ -27,7 +26,7 @@ export default function DocsViewer() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search docs (e.g., 'print', 'array', 'loop')..."
-              className="w-full bg-[#18181b]/50 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-inner backdrop-blur-xl"
+              className="w-full bg-[#18181b]/50 border border-white/10 rounded-full py-4 pl-12 pr-4 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-inner backdrop-blur-xl"
             />
           </div>
         </div>
@@ -43,12 +42,12 @@ export default function DocsViewer() {
             </div>
           ) : (
             results.map(doc => (
-              <div key={doc.id} className="bg-[#18181b]/30 border border-white/5 rounded-xl p-6 hover:bg-[#18181b]/50 hover:border-white/10 transition-colors group">
+              <div key={doc.id} className="pb-8 mb-8 border-b border-white/5 last:border-0 last:pb-0 last:mb-0 group">
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-xl font-bold text-white font-mono">{doc.title}</h3>
-                      <span className="text-xs font-medium px-2 py-1 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-wider">
+                      <span className="text-xs font-medium px-2 py-1 rounded bg-zinc-800/50 text-zinc-400 border border-zinc-700/50 uppercase tracking-wider">
                         {doc.category}
                       </span>
                     </div>
