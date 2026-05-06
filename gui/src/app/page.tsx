@@ -1,72 +1,164 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
+import { FileCode2, Plus, Terminal, Play } from "lucide-react";
 
-const defaultCode = `// Variables
-lowkey x: num = 42;
-lowkey name: txt = "bruh";
+type FileData = {
+  id: string;
+  name: string;
+  content: string;
+};
 
-// Conditional
-sus (x > 10) {
-    spill_tea("x is big");
+const initialFiles: FileData[] = [
+  {
+    id: "1",
+    name: "hello.genz",
+    content: `// The classic hello world
+spill_tea("hello world");
+`
+  },
+  {
+    id: "2",
+    name: "math.genz",
+    content: `// Variables and math
+lowkey x: num = 10;
+lowkey y: num = 5;
+lowkey result: num = x + y;
+
+spill_tea("Result is:", result);
+`
+  },
+  {
+    id: "3",
+    name: "brainrot.genz",
+    content: `// Extreme brainrot example
+tung_tung_tung_sahur
+
+lowkey aura: num = 100;
+
+sus (aura > 50) {
+    spill_tea("W rizz");
 } deadass {
-    spill_tea("x is small");
+    skibidi_toilet;
+    grimace_shake;
 }
 
-// Function
-vibe_check greet() {
-    spill_tea(name);
-    slay 0;
-}`;
+ballerina_cappuccina;
+`
+  }
+];
 
 export default function Home() {
-  const [code, setCode] = useState(defaultCode);
+  const [files, setFiles] = useState<FileData[]>(initialFiles);
+  const [activeFileId, setActiveFileId] = useState<string>("1");
+  const [output, setOutput] = useState<string>("");
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+
+  const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
   const handleEditorWillMount = (monaco: Monaco) => {
     setupGenZLanguage(monaco);
   };
 
   const handleEditorChange = (value: string | undefined) => {
-    if (value) setCode(value);
+    if (value !== undefined) {
+      setFiles(files.map(f => f.id === activeFileId ? { ...f, content: value } : f));
+    }
   };
 
-  const handleRun = () => {
-    console.log("Running code...", code);
-    // In a real app, this would send code to the backend compiler.
+  const handleCreateFile = () => {
+    const newId = Date.now().toString();
+    const newFile: FileData = {
+      id: newId,
+      name: `untitled-${files.length + 1}.genz`,
+      content: `// New file\n`
+    };
+    setFiles([...files, newFile]);
+    setActiveFileId(newId);
+  };
+
+  const handleRun = async () => {
+    setIsRunning(true);
+    setOutput("Running...\n");
+    try {
+      const response = await fetch('/api/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: activeFile.content })
+      });
+      const data = await response.json();
+      setOutput(data.output || "Program finished with no output.");
+    } catch (err) {
+      setOutput("Error connecting to Python backend. Is the Flask server running on port 5000?\n\nDetails: " + String(err));
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800">
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 border-b border-zinc-900 bg-zinc-950">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-zinc-100 text-zinc-950 flex items-center justify-center font-bold text-xl leading-none">
-            G
+    <div className="flex h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-800">
+      
+      {/* Sidebar - File Explorer */}
+      <aside className="w-64 border-r border-zinc-900 bg-[#09090b] flex flex-col shrink-0">
+        <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-zinc-100 text-zinc-950 flex items-center justify-center font-bold text-xs">
+              G
+            </div>
+            <h2 className="text-sm font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-100">GenZCode Studio</h1>
+          <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
+            <Plus size={16} />
+          </button>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-zinc-400 font-mono bg-zinc-900 px-3 py-1 rounded-md">main.genz</span>
+        
+        <div className="flex-1 overflow-y-auto py-2">
+          {files.map(file => (
+            <button
+              key={file.id}
+              onClick={() => setActiveFileId(file.id)}
+              className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors ${
+                activeFileId === file.id ? "bg-zinc-900 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-300"
+              }`}
+            >
+              <FileCode2 size={14} className={activeFileId === file.id ? "text-zinc-100" : "text-zinc-500"} />
+              {file.name}
+            </button>
+          ))}
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-zinc-950">
+        
+        {/* Header */}
+        <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-900 bg-zinc-950 shrink-0">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
+              <FileCode2 size={14} className="text-zinc-400" />
+              <span className="font-mono">{activeFile.name}</span>
+            </div>
+          </div>
           <Button 
             onClick={handleRun}
-            className="bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium px-6 rounded-md shadow-sm"
+            disabled={isRunning}
+            className="bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium px-4 h-8 rounded-md shadow-sm flex items-center gap-2"
           >
-            Run
+            <Play size={14} />
+            {isRunning ? "Running..." : "Run Code"}
           </Button>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col p-6 overflow-hidden bg-zinc-950">
-        <div className="flex-1 rounded-xl overflow-hidden border border-zinc-800 bg-[#09090b] shadow-2xl relative ring-1 ring-white/5">
+        {/* Editor */}
+        <main className="flex-1 overflow-hidden relative">
           <Editor
             height="100%"
-            defaultLanguage="genz"
+            language="genz"
             theme="genzDark"
-            value={code}
+            value={activeFile.content}
             onChange={handleEditorChange}
             beforeMount={handleEditorWillMount}
             options={{
@@ -74,7 +166,7 @@ export default function Home() {
               fontSize: 14,
               fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
               lineHeight: 1.6,
-              padding: { top: 24, bottom: 24 },
+              padding: { top: 16, bottom: 16 },
               scrollBeyondLastLine: false,
               smoothScrolling: true,
               cursorBlinking: "smooth",
@@ -83,8 +175,20 @@ export default function Home() {
               renderLineHighlight: "all",
             }}
           />
+        </main>
+
+        {/* Output Panel */}
+        <div className="h-64 border-t border-zinc-900 bg-[#09090b] flex flex-col shrink-0">
+          <div className="px-4 py-2 border-b border-zinc-900 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-zinc-950/50 uppercase tracking-wider">
+            <Terminal size={12} />
+            Output
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
+            {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
+          </div>
         </div>
-      </main>
+
+      </div>
     </div>
   );
 }
