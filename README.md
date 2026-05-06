@@ -148,3 +148,33 @@ This compiler demonstrates:
 - Interpretation
 
 Built with Python for Compiler Construction course.
+
+---
+
+## 🚀 Recent Updates & Web IDE Changelog
+
+We have successfully designed, built, and shipped a modern, high-fidelity **Web-based IDE (GenZCode Studio)** along with substantial compiler upgrades. Below is the detailed record of commits from `270ada1` to `abe0313`:
+
+### 🎨 1. Web IDE & Monaco Editor Integration
+- **Next.js & Shadcn Dark Theme (`270ada1`, `d702be2`, `1e1995d`)**: Built an extremely premium, dark-themed studio using React, Next.js, and Shadcn UI.
+- **Monaco Syntax Highlighter (`8cbbd12`, `576448b`)**: Integrated Microsoft's Monaco Editor with full custom language configurations for GenZCode.
+- **Arc-Style Mica Glassmorphism (`371a309`, `35296a5`, `893d90c`, `e28086a`)**: Refined the layout with semi-transparent glass sidebar headers, rounded flush borders, and a beautiful editor window design.
+
+### 🔌 2. File Explorer & Python Backend Proxy
+- **Flask Execution Server (`de7e4bd`, `4bcaa70`)**: Developed a Flask backend integration to compile and execute GenZCode files asynchronously.
+- **Interactive File Explorer (`6e418c2`, `78a8a9e`, `4bcaa70`)**: Added a Left Sidebar to create, select, rename, and delete multiple files natively, pre-populating with 7 fun GenZ examples.
+- **Active Tab Headers (`03a4159`)**: Cleaned up the navigation header to show the currently active file centered in a sleek regular font.
+
+### 📚 3. Fuzzy Search Documentation Center
+- **Interactive Docs Center (`0da1c9f`, `1ebf8ad`, `30b7e12`, `c2e06e7`, `4081a7e`)**: Developed an integrated, fuzzy-searchable documentation side-panel allowing users to search standard programming concepts and immediately find their GenZ equivalents.
+- **Clean Layout & Zinc Tags (`2167289`, `c800c6c`, `143f7d9`, `05ac6c3`)**: Removed clutter, centered headings, and colorized variable outputs using sleek Zinc badges.
+
+### 🧠 4. Brainrot Keyword Lexer & Parser Upgrades
+- **11 Brand New Keywords Integrated**: Added support for `goon`, `rizz`, `fanum_tax`, `skibidi`, `skibidi_toilet`, `tung_tung_tung_sahur`, `mewing`, `edge`, `ohio`, `grimace_shake`, and `ballerina_cappuccina`.
+- **`goon` Infinite Loops**: Mapped `goon { ... }` directly to `WhileStmt(Literal(True))` inside the parser, eliminating compilation syntax errors.
+- **In-place Variable Mutation**: Configured `fanum_tax(x)` and `rizz(x)` to automatically mutate the referenced variable directly inside the interpreter's environment!
+
+### 🕶️ 5. One Dark Pro Theme & Sizing Polish
+- **Subtle Syntax Highlighter**: Replaced neon colors with a soft, elegant One Dark Pro style using gentle teal, warm gold, and light blue accents.
+- **Sleek Zinc Scrollbars**: Implemented global CSS webkit scrollbars with compact dark tracks and floating hover-responsive pills.
+- **Compact Run Button**: Decreased padding and height on the Run Code button to a sleek regular-weight `h-8` element.
