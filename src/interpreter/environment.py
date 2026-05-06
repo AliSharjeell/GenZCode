@@ -202,6 +202,40 @@ class Builtins:
         import math
         return math.sqrt(float(args[0])) if args else 0
 
+    @staticmethod
+    def ohio_fn(args: list, interpreter: 'Interpreter') -> None:
+        """Triggers a chaotic state or error condition."""
+        raise RuntimeError("Down in Ohio, swag like Ohio. Chaotic state detected!")
+
+    @staticmethod
+    def grimace_shake_fn(args: list, interpreter: 'Interpreter') -> None:
+        """Triggers a fatal error or crash."""
+        raise RuntimeError("Code poisoned by Grimace Shake! Fatal crash...")
+
+    @staticmethod
+    def mewing_fn(args: list, interpreter: 'Interpreter') -> None:
+        """Silences output or pauses execution."""
+        import time
+        sleep_ms = float(args[0]) if args else 1000.0
+        time.sleep(sleep_ms / 1000.0)
+
+    @staticmethod
+    def fanum_tax_fn(args: list, interpreter: 'Interpreter') -> float:
+        """Steals a percentage of a variable's value."""
+        val = float(args[0]) if args else 0.0
+        return val * 0.8  # 20% tax
+
+    @staticmethod
+    def rizz_fn(args: list, interpreter: 'Interpreter') -> float:
+        """Charisma. Adds value."""
+        val = float(args[0]) if args else 0.0
+        return val + 10.0
+
+    @staticmethod
+    def ballerina_cappuccina_fn(args: list, interpreter: 'Interpreter') -> str:
+        """A graceful and fancy operation."""
+        return "Fancy Ballerina Cappuccina"
+
     FUNCTIONS = {
         'print': BuiltinFunction('print', print_fn),
         'input': BuiltinFunction('input', input_fn),
@@ -212,6 +246,12 @@ class Builtins:
         'abs': BuiltinFunction('abs', abs_fn),
         'pow': BuiltinFunction('pow', pow_fn),
         'sqrt': BuiltinFunction('sqrt', sqrt_fn),
+        'ohio': BuiltinFunction('ohio', ohio_fn),
+        'grimace_shake': BuiltinFunction('grimace_shake', grimace_shake_fn),
+        'mewing': BuiltinFunction('mewing', mewing_fn),
+        'fanum_tax': BuiltinFunction('fanum_tax', fanum_tax_fn),
+        'rizz': BuiltinFunction('rizz', rizz_fn),
+        'ballerina_cappuccina': BuiltinFunction('ballerina_cappuccina', ballerina_cappuccina_fn),
     }
 
     @classmethod

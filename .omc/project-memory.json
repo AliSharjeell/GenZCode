@@ -1,0 +1,165 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1778095438816,
+  "projectRoot": "C:\\AppsNew\\GenZCode",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": "snake_case",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "examples",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "examples": {
+      "path": "examples",
+      "purpose": "Example code",
+      "fileCount": 1,
+      "lastAccessed": 1778095438675,
+      "keyFiles": [
+        "hello.genz"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1778095438676,
+      "keyFiles": [
+        "main.py",
+        "__init__.py"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 6,
+      "lastAccessed": 1778095438677,
+      "keyFiles": [
+        "conftest.py",
+        "test_generator.py",
+        "test_interpreter.py",
+        "test_lexer.py",
+        "test_parser.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "examples\\hello.genz",
+      "accessCount": 3,
+      "lastAccessed": 1778097931036,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 2,
+      "lastAccessed": 1778097914009,
+      "type": "directory"
+    },
+    {
+      "path": "src\\parser\\parser.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097927665,
+      "type": "file"
+    },
+    {
+      "path": "src\\parser\\ast.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097927917,
+      "type": "file"
+    },
+    {
+      "path": "src\\semantic\\symbol_table.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928047,
+      "type": "file"
+    },
+    {
+      "path": "src\\interpreter\\interpreter.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928106,
+      "type": "file"
+    },
+    {
+      "path": "src\\generator\\generator.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928181,
+      "type": "file"
+    },
+    {
+      "path": "src\\lexer\\tokens.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928317,
+      "type": "file"
+    },
+    {
+      "path": "src\\semantic\\analyzer.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928481,
+      "type": "file"
+    },
+    {
+      "path": "src\\lexer\\lexer.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928551,
+      "type": "file"
+    },
+    {
+      "path": "src\\main.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928670,
+      "type": "file"
+    },
+    {
+      "path": "src\\interpreter\\environment.py",
+      "accessCount": 2,
+      "lastAccessed": 1778097928753,
+      "type": "file"
+    },
+    {
+      "path": "grammar.md",
+      "accessCount": 2,
+      "lastAccessed": 1778097930876,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 2,
+      "lastAccessed": 1778097931006,
+      "type": "file"
+    },
+    {
+      "path": "tests\\test_lexer.py",
+      "accessCount": 1,
+      "lastAccessed": 1778095879736,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

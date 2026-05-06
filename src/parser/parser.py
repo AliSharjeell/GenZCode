@@ -116,6 +116,23 @@ class Parser:
             return self._if_statement()
         elif self._match(TokenType.KEEP_YAPPING):
             return self._while_statement()
+        elif self._match(TokenType.GOON):
+            return self._goon_statement()
+        elif self._match(TokenType.TUNG_TUNG_TUNG_SAHUR):
+            self._consume(TokenType.SEMI, "Expected ';' after 'tung_tung_tung_sahur'")
+            return PrintStmt(arguments=[Literal(value="Tung Tung Tung Sahur! Code is waking up...")])
+        elif self._match(TokenType.SKIBIDI_TOILET):
+            self._consume(TokenType.SEMI, "Expected ';' after 'skibidi_toilet'")
+            return PrintStmt(arguments=[Literal(value="Memory flushed... clean as a whistle fr fr")])
+        elif self._match(TokenType.OHIO):
+            self._consume(TokenType.SEMI, "Expected ';' after 'ohio'")
+            return ExprStmt(expression=FuncCall(name="ohio", arguments=[]))
+        elif self._match(TokenType.GRIMACE_SHAKE):
+            self._consume(TokenType.SEMI, "Expected ';' after 'grimace_shake'")
+            return ExprStmt(expression=FuncCall(name="grimace_shake", arguments=[]))
+        elif self._match(TokenType.EDGE):
+            self._consume(TokenType.SEMI, "Expected ';' after 'edge'")
+            return PrintStmt(arguments=[Literal(value="Nearly there... edging the end...")])
         elif self._match(TokenType.SLAY):
             return self._return_statement()
         elif self._match(TokenType.BOUNCE):
@@ -184,6 +201,11 @@ class Parser:
         body = self._statement()
 
         return WhileStmt(condition=condition, body=body)
+
+    def _goon_statement(self) -> WhileStmt:
+        """Parse: goon statement"""
+        body = self._statement()
+        return WhileStmt(condition=Literal(value=True), body=body)
 
     def _switch_statement(self) -> SwitchStmt:
         """Parse: ratio ( expr ) { bet value: statements nvm: statements }"""
@@ -388,7 +410,15 @@ class Parser:
             self._consume(TokenType.RPAREN, "Expected ')' after expression")
             return expr
 
-        if self._match(TokenType.IDENT):
+        if self._match(
+            TokenType.IDENT,
+            TokenType.RIZZ,
+            TokenType.FANUM_TAX,
+            TokenType.BALLERINA_CAPPUCCINA,
+            TokenType.MEWING,
+            TokenType.OHIO,
+            TokenType.GRIMACE_SHAKE
+        ):
             name = self._previous().lexeme
 
             # Check for array access: ident[expr]

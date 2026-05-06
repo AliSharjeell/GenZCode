@@ -6,13 +6,20 @@ export function setupGenZLanguage(monaco: Monaco) {
 
   // Syntax highlighting
   monaco.languages.setMonarchTokensProvider("genz", {
-    keywords: [
-      "lowkey", "num", "txt", "sus", "deadass", "keep_yapping",
-      "spill_tea", "vibe_check", "slay", "bounce", "next_up",
-      "ratio", "bet", "nvm", "no_cap", "fr_fr",
-      "tung_tung_tung_sahur", "ballerina_cappuccina", "skibidi_toilet",
-      "skibidi", "fanum_tax", "rizz", "ohio", "mewing", "grimace_shake",
-      "goon", "edge"
+    controlKeywords: [
+      "sus", "deadass", "keep_yapping", "goon", "ratio", "bet", "nvm", "slay", "bounce", "next_up", "edge", "skibidi"
+    ],
+    typeKeywords: [
+      "num", "txt"
+    ],
+    declKeywords: [
+      "lowkey", "vibe_check", "tung_tung_tung_sahur"
+    ],
+    functionKeywords: [
+      "spill_tea", "rizz", "fanum_tax", "mewing", "ohio", "grimace_shake", "ballerina_cappuccina", "skibidi_toilet"
+    ],
+    boolKeywords: [
+      "no_cap", "fr_fr"
     ],
     operators: [
       "=", ">", "<", "!", "~", "?", ":", "==", "<=", ">=", "!=",
@@ -20,7 +27,16 @@ export function setupGenZLanguage(monaco: Monaco) {
     ],
     tokenizer: {
       root: [
-        [/[a-z_$][\w$]*/, { cases: { "@keywords": "keyword", "@default": "identifier" } }],
+        [/[a-z_$][\w$]*/, {
+          cases: {
+            "@controlKeywords": "keyword.control",
+            "@typeKeywords": "type",
+            "@declKeywords": "keyword.decl",
+            "@functionKeywords": "function",
+            "@boolKeywords": "constant",
+            "@default": "identifier"
+          }
+        }],
         [/[0-9]+/, "number"],
         [/[{}()\[\]]/, "@brackets"],
         [/"[^"]*"/, "string"],
@@ -115,11 +131,15 @@ export function setupGenZLanguage(monaco: Monaco) {
     base: "vs-dark",
     inherit: true,
     rules: [
-      { token: "keyword", foreground: "e4e4e7" }, // zinc-200
-      { token: "identifier", foreground: "a1a1aa" }, // zinc-400
-      { token: "number", foreground: "d4d4d8" }, // zinc-300
-      { token: "string", foreground: "71717a" }, // zinc-500
-      { token: "comment", foreground: "52525b", fontStyle: "italic" }, // zinc-600
+      { token: "keyword.control", foreground: "#56b6c2", fontStyle: "bold" }, // Soft Teal/Cyan control flow
+      { token: "keyword.decl", foreground: "#e5c07b" },                       // Soft Warm Gold declarations
+      { token: "type", foreground: "#4fc1ff" },                               // Soft Light Blue types
+      { token: "function", foreground: "#61afef" },                           // Soft Blue functions
+      { token: "constant", foreground: "#d19a66" },                           // Soft Amber/Orange booleans/constants
+      { token: "identifier", foreground: "#abb2bf" },                         // Soft Slate-white identifiers
+      { token: "number", foreground: "#d19a66" },                             // Soft Amber/Orange numbers
+      { token: "string", foreground: "#98c379" },                             // Soft Sage Green strings
+      { token: "comment", foreground: "#5c6370", fontStyle: "italic" },       // Muted Dark Slate comments
     ],
     colors: {
       "editor.background": "#09090b", // zinc-950

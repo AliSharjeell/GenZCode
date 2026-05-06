@@ -29,6 +29,17 @@ class TokenType(Enum):
     RATIO = auto()       # switch
     BET = auto()         # case
     NVM = auto()         # default (nvm, that's it)
+    TUNG_TUNG_TUNG_SAHUR = auto()
+    BALLERINA_CAPPUCCINA = auto()
+    SKIBIDI_TOILET = auto()
+    SKIBIDI = auto()
+    FANUM_TAX = auto()
+    RIZZ = auto()
+    OHIO = auto()
+    MEWING = auto()
+    GRIMACE_SHAKE = auto()
+    GOON = auto()
+    EDGE = auto()
 
     # Operators
     PLUS = auto()        # +
@@ -80,6 +91,17 @@ KEYWORDS = {
     'ratio': TokenType.RATIO,
     'bet': TokenType.BET,
     'nvm': TokenType.NVM,
+    'tung_tung_tung_sahur': TokenType.TUNG_TUNG_TUNG_SAHUR,
+    'ballerina_cappuccina': TokenType.BALLERINA_CAPPUCCINA,
+    'skibidi_toilet': TokenType.SKIBIDI_TOILET,
+    'skibidi': TokenType.SKIBIDI,
+    'fanum_tax': TokenType.FANUM_TAX,
+    'rizz': TokenType.RIZZ,
+    'ohio': TokenType.OHIO,
+    'mewing': TokenType.MEWING,
+    'grimace_shake': TokenType.GRIMACE_SHAKE,
+    'goon': TokenType.GOON,
+    'edge': TokenType.EDGE,
 }
 
 

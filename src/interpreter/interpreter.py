@@ -286,17 +286,30 @@ class Interpreter(ASTVisitor):
 
     def _call_function(self, name: str, arguments: list[Expr]) -> Any:
         """Call a function."""
-        # Evaluate arguments
-        args = [self._evaluate_expr(arg) for arg in arguments]
-
         # Check built-ins first
         builtin = Builtins.get_function(name)
         if builtin:
+            if name == 'fanum_tax' and arguments and isinstance(arguments[0], Variable):
+                var_name = arguments[0].name
+                val = self._evaluate_expr(arguments[0])
+                taxed_val = float(val) * 0.8
+                self.environment.set(var_name, RuntimeValue(taxed_val, "num"))
+                return taxed_val
+            elif name == 'rizz' and arguments and isinstance(arguments[0], Variable):
+                var_name = arguments[0].name
+                val = self._evaluate_expr(arguments[0])
+                rizzed_val = float(val) + 10.0
+                self.environment.set(var_name, RuntimeValue(rizzed_val, "num"))
+                return rizzed_val
+
+            # Evaluate arguments normally
+            args = [self._evaluate_expr(arg) for arg in arguments]
             return builtin.call(args, self)
 
         # Check user functions
         if name in self.functions:
             user_func = self.functions[name]
+            args = [self._evaluate_expr(arg) for arg in arguments]
             return user_func.call(args, self)
 
         raise InterpreterError(f"Undefined function: '{name}'")

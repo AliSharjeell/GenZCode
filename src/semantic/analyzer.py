@@ -73,7 +73,9 @@ class SemanticAnalyzer(ASTVisitor):
         builtins = {
             'print': 0, 'len': 1, 'str': 1, 'num': 1,
             'range': -1, 'abs': 1, 'pow': 2, 'sqrt': 1,
-            'input': 0
+            'input': 0,
+            'ohio': 0, 'grimace_shake': 0, 'mewing': -1,
+            'fanum_tax': 1, 'rizz': 1, 'ballerina_cappuccina': 0
         }
         for name, param_count in builtins.items():
             self._declare_builtin_function(name, param_count)
