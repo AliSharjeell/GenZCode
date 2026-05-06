@@ -419,7 +419,6 @@ export default function Home() {
             <DocsViewer />
           )}
 
-        </div>
       </div>
     </div>
   );
