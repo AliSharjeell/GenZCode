@@ -2,8 +2,33 @@
 
 A complete compiler for a Gen-Z slang-based programming language built for academic purposes.
 
-## Quick Start
+## 🚀 How to Start
 
+You can run GenZCode either inside the **Web IDE Studio** or directly via the **CLI compiler**.
+
+### 🐳 1. Start via Docker (Recommended)
+Launch the unified Web IDE and Flask backend server instantly with one command:
+```bash
+docker-compose up --build
+```
+Once started, visit:
+- **Web IDE**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:5000](http://localhost:5000)
+
+### 💻 2. Start Locally (CLI & Dev Servers)
+
+#### Run Frontend & Backend Locally:
+```bash
+# Start Flask backend (from project root)
+python -m src.server
+
+# Start Next.js frontend (from /gui directory)
+cd gui
+npm install
+npm run dev
+```
+
+#### Run via Terminal Compiler:
 ```bash
 # Run directly with interpreter
 python -m src.main examples/hello.genz --interpret
