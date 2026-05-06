@@ -4,7 +4,7 @@ import { useState } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
-import { FileCode2, Plus, Terminal, Play } from "lucide-react";
+import { FileCode2, Plus, Terminal, Play, Trash2, Edit2 } from "lucide-react";
 
 type FileData = {
   id: string;
@@ -54,6 +54,8 @@ ballerina_cappuccina;
 export default function Home() {
   const [files, setFiles] = useState<FileData[]>(initialFiles);
   const [activeFileId, setActiveFileId] = useState<string>("1");
+  const [editingFileId, setEditingFileId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
@@ -78,6 +80,30 @@ export default function Home() {
     };
     setFiles([...files, newFile]);
     setActiveFileId(newId);
+  };
+
+  const handleDeleteFile = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (files.length <= 1) return; // Cannot delete last file
+    const newFiles = files.filter(f => f.id !== id);
+    setFiles(newFiles);
+    if (activeFileId === id) {
+      setActiveFileId(newFiles[0].id);
+    }
+  };
+
+  const handleStartRename = (file: FileData, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingFileId(file.id);
+    setEditingName(file.name);
+  };
+
+  const handleFinishRename = (e?: React.MouseEvent | React.FormEvent) => {
+    if (e) e.stopPropagation();
+    if (editingFileId && editingName.trim()) {
+      setFiles(files.map(f => f.id === editingFileId ? { ...f, name: editingName.trim() } : f));
+    }
+    setEditingFileId(null);
   };
 
   const handleRun = async () => {
@@ -117,16 +143,45 @@ export default function Home() {
         
         <div className="flex-1 overflow-y-auto py-2">
           {files.map(file => (
-            <button
+            <div
               key={file.id}
               onClick={() => setActiveFileId(file.id)}
-              className={`w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors ${
+              className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer group ${
                 activeFileId === file.id ? "bg-zinc-900 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-300"
               }`}
             >
-              <FileCode2 size={14} className={activeFileId === file.id ? "text-zinc-100" : "text-zinc-500"} />
-              {file.name}
-            </button>
+              <div className="flex items-center gap-2 overflow-hidden w-full">
+                <FileCode2 size={14} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
+                {editingFileId === file.id ? (
+                  <form onSubmit={(e) => { e.preventDefault(); handleFinishRename(); }} className="flex-1 min-w-0">
+                    <input
+                      autoFocus
+                      type="text"
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                      onBlur={() => handleFinishRename()}
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-full bg-zinc-950 border border-zinc-700 rounded px-1 text-zinc-100 text-xs py-0.5 focus:outline-none focus:border-zinc-500"
+                    />
+                  </form>
+                ) : (
+                  <span className="truncate">{file.name}</span>
+                )}
+              </div>
+              
+              {!editingFileId && (
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={(e) => handleStartRename(file, e)} className="p-1 hover:text-zinc-100 text-zinc-500">
+                    <Edit2 size={12} />
+                  </button>
+                  {files.length > 1 && (
+                    <button onClick={(e) => handleDeleteFile(file.id, e)} className="p-1 hover:text-red-400 text-zinc-500">
+                      <Trash2 size={12} />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </aside>
