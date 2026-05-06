@@ -280,126 +280,144 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen text-zinc-50 font-sans selection:bg-zinc-800 bg-gradient-to-br from-zinc-800 via-zinc-900 to-zinc-950">
+    <div 
+      className="flex h-screen w-full items-center justify-center p-4 sm:p-8 bg-black"
+      style={{
+        backgroundImage: `url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}
+    >
+      {/* App Window */}
+      <div className="flex w-full h-full max-w-[1400px] rounded-xl overflow-hidden border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] text-zinc-50 font-sans selection:bg-zinc-800 bg-[#0a0a0a]">
 
-      {/* Sidebar - File Explorer */}
-      <aside className="w-64 border-r border-white/5 bg-transparent flex flex-col shrink-0">
-        <div className="p-4 border-b border-zinc-900/50 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-medium tracking-wide text-zinc-300">EXPLORER</h2>
+        {/* Sidebar - File Explorer */}
+        <aside className="w-64 border-r border-white/5 bg-black/40 backdrop-blur-3xl flex flex-col shrink-0 relative">
+          
+          {/* macOS window controls mock */}
+          <div className="px-5 pt-5 pb-4 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-sm"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-sm"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-sm"></div>
           </div>
-          <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
-            <Plus size={18} />
-          </button>
-        </div>
 
-        <div className="flex-1 overflow-y-auto py-3 px-3">
-          <div className="flex flex-col gap-1">
-            {files.map(file => (
-              <div
-                key={file.id}
-                onClick={() => setActiveFileId(file.id)}
-                className={`w-full text-left px-3 py-2 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${activeFileId === file.id ? "bg-zinc-900/80 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/40 hover:text-zinc-300"
+          <div className="px-5 pb-2 flex items-center justify-between">
+            <h2 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">Explorer</h2>
+            <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
+              <Plus size={16} />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-2 px-3">
+            <div className="flex flex-col gap-1">
+              {files.map(file => (
+                <div
+                  key={file.id}
+                  onClick={() => setActiveFileId(file.id)}
+                  className={`w-full text-left px-3 py-2 text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer group rounded-md ${
+                    activeFileId === file.id ? "bg-white/10 text-white font-medium shadow-sm" : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
                   }`}
-              >
-                <div className="flex items-center gap-2 overflow-hidden w-full">
-                  <FileCode2 size={16} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
-                  {editingFileId === file.id ? (
-                    <form onSubmit={(e) => { e.preventDefault(); handleFinishRename(); }} className="flex-1 min-w-0">
-                      <input
-                        autoFocus
-                        type="text"
-                        value={editingName}
-                        onChange={(e) => setEditingName(e.target.value)}
-                        onBlur={() => handleFinishRename()}
-                        onClick={(e) => e.stopPropagation()}
-                        className="w-full bg-zinc-950 border border-zinc-700 rounded px-2 text-zinc-100 text-sm py-1 focus:outline-none focus:border-zinc-500"
-                      />
-                    </form>
-                  ) : (
-                    <span className="truncate">{file.name}</span>
-                  )}
-                </div>
-
-                {!editingFileId && (
-                  <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={(e) => handleStartRename(file, e)} className="p-1 hover:text-zinc-100 text-zinc-500">
-                      <Edit2 size={14} />
-                    </button>
-                    {files.length > 1 && (
-                      <button onClick={(e) => handleDeleteFile(file.id, e)} className="p-1 hover:text-red-400 text-zinc-500">
-                        <Trash2 size={14} />
-                      </button>
+                >
+                  <div className="flex items-center gap-2 overflow-hidden w-full">
+                    <FileCode2 size={14} className={activeFileId === file.id ? "text-zinc-200 shrink-0" : "text-zinc-500 shrink-0"} />
+                    {editingFileId === file.id ? (
+                      <form onSubmit={(e) => { e.preventDefault(); handleFinishRename(); }} className="flex-1 min-w-0">
+                        <input
+                          autoFocus
+                          type="text"
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onBlur={() => handleFinishRename()}
+                          onClick={(e) => e.stopPropagation()}
+                          className="w-full bg-zinc-950 border border-zinc-700 rounded px-2 text-zinc-100 text-sm py-1 focus:outline-none focus:border-zinc-500"
+                        />
+                      </form>
+                    ) : (
+                      <span className="truncate">{file.name}</span>
                     )}
                   </div>
-                )}
+
+                  {!editingFileId && (
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={(e) => handleStartRename(file, e)} className="p-1 hover:text-zinc-100 text-zinc-500">
+                        <Edit2 size={13} />
+                      </button>
+                      {files.length > 1 && (
+                        <button onClick={(e) => handleDeleteFile(file.id, e)} className="p-1 hover:text-red-400 text-zinc-500">
+                          <Trash2 size={13} />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 bg-[#0a0a0a]">
+
+          {/* Header */}
+          <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 shrink-0 bg-[#0a0a0a]">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-zinc-300">
+                <span className="font-mono text-zinc-400">{activeFile.name}</span>
               </div>
-            ))}
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleRun}
+                disabled={isRunning}
+                className="bg-transparent text-zinc-300 hover:text-zinc-100 border border-zinc-700 hover:border-zinc-500 transition-colors font-medium px-4 h-8 rounded-full shadow-sm flex items-center gap-2 text-xs"
+              >
+                <Play size={12} fill="currentColor" />
+                {isRunning ? "Running..." : "Run Code"}
+              </Button>
+            </div>
+          </header>
+
+          {/* Editor and Output Container */}
+          <div className="flex-1 flex flex-col overflow-hidden bg-[#0a0a0a]">
+
+            {/* Editor */}
+            <main className="flex-1 overflow-hidden relative">
+              <Editor
+                height="100%"
+                language="genz"
+                theme="genzDark"
+                value={activeFile.content}
+                onChange={handleEditorChange}
+                beforeMount={handleEditorWillMount}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
+                  lineHeight: 1.6,
+                  padding: { top: 16, bottom: 16 },
+                  scrollBeyondLastLine: false,
+                  smoothScrolling: true,
+                  cursorBlinking: "smooth",
+                  cursorSmoothCaretAnimation: "on",
+                  formatOnPaste: true,
+                  renderLineHighlight: "all",
+                }}
+              />
+            </main>
+
+            {/* Output Panel */}
+            <div className="h-64 border-t border-white/5 bg-[#050505] flex flex-col shrink-0 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+              <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-[#0a0a0a] uppercase tracking-wider">
+                <Terminal size={12} />
+                Output
+              </div>
+              <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
+                {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
+              </div>
+            </div>
           </div>
+
         </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-transparent">
-
-        {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-transparent">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-base text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
-              <FileCode2 size={16} className="text-zinc-400" />
-              <span className="font-mono">{activeFile.name}</span>
-            </div>
-          </div>
-          <Button
-            onClick={handleRun}
-            disabled={isRunning}
-            className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800 border border-zinc-700 transition-colors font-medium px-5 h-9 rounded-md shadow-sm flex items-center gap-2"
-          >
-            <Play size={16} fill="currentColor" />
-            {isRunning ? "Running..." : "Run Code"}
-          </Button>
-        </header>
-
-        {/* Editor and Output Container */}
-        <div className="flex-1 flex flex-col mx-4 mb-4 overflow-hidden rounded-xl border border-zinc-800/50 shadow-2xl bg-[#09090b] ring-1 ring-black/50">
-
-          {/* Editor */}
-          <main className="flex-1 overflow-hidden relative">
-            <Editor
-              height="100%"
-              language="genz"
-              theme="genzDark"
-              value={activeFile.content}
-              onChange={handleEditorChange}
-              beforeMount={handleEditorWillMount}
-              options={{
-                minimap: { enabled: false },
-                fontSize: 14,
-                fontFamily: "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
-                lineHeight: 1.6,
-                padding: { top: 16, bottom: 16 },
-                scrollBeyondLastLine: false,
-                smoothScrolling: true,
-                cursorBlinking: "smooth",
-                cursorSmoothCaretAnimation: "on",
-                formatOnPaste: true,
-                renderLineHighlight: "all",
-              }}
-            />
-          </main>
-
-          {/* Output Panel */}
-          <div className="h-64 border-t border-zinc-900 bg-[#050505] flex flex-col shrink-0 relative z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-            <div className="px-4 py-2 border-b border-zinc-900 flex items-center gap-2 text-xs font-medium text-zinc-400 bg-zinc-950/80 uppercase tracking-wider">
-              <Terminal size={12} />
-              Output
-            </div>
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-zinc-300 whitespace-pre-wrap">
-              {output || <span className="text-zinc-600 italic">Ready. Click Run to execute code...</span>}
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   );
