@@ -135,5 +135,93 @@ export const genzDocs: DocEntry[] = [
     description: "The 'default' case inside a 'ratio' (switch) block if no other 'bet' matches.",
     example: `nvm: {\n    spill_tea("L");\n}`,
     category: "Control Flow"
+  },
+  {
+    id: "tung_tung_tung_sahur",
+    title: "tung_tung_tung_sahur",
+    aliases: ["wake up", "initialize", "start"],
+    description: "Time to wake up your code. Initialize or start a process.",
+    example: `tung_tung_tung_sahur;`,
+    category: "Control Flow"
+  },
+  {
+    id: "ballerina_cappuccina",
+    title: "ballerina_cappuccina",
+    aliases: ["graceful exit", "fancy string", "fancy"],
+    description: "A graceful and fancy operation.",
+    example: `ballerina_cappuccina();`,
+    category: "Functions"
+  },
+  {
+    id: "skibidi_toilet",
+    title: "skibidi_toilet",
+    aliases: ["flush", "garbage collection", "clear"],
+    description: "Flushes the memory or triggers garbage collection.",
+    example: `skibidi_toilet;`,
+    category: "Control Flow"
+  },
+  {
+    id: "skibidi",
+    title: "skibidi",
+    aliases: ["bad", "evil", "chaotic"],
+    description: "Something chaotic or evil.",
+    example: `lowkey x: txt = "skibidi";`,
+    category: "Variables"
+  },
+  {
+    id: "fanum_tax",
+    title: "fanum_tax",
+    aliases: ["steal", "subtract", "deduct"],
+    description: "Steals a percentage of a variable's value (subtraction).",
+    example: `lowkey food: num = 100;\nfanum_tax(food); // Leaves you with less food`,
+    category: "Functions"
+  },
+  {
+    id: "rizz",
+    title: "rizz",
+    aliases: ["charisma", "add", "success", "charm"],
+    description: "Charisma. Often used to charm a function into returning true or adding value.",
+    example: `lowkey aura: num = rizz(10);`,
+    category: "Functions"
+  },
+  {
+    id: "ohio",
+    title: "ohio",
+    aliases: ["error", "chaotic state", "weird"],
+    description: "A chaotic state or error condition.",
+    example: `sus (is_buggy) {\n    ohio;\n}`,
+    category: "Control Flow"
+  },
+  {
+    id: "mewing",
+    title: "mewing",
+    aliases: ["silence", "sleep", "wait", "pause"],
+    description: "Silences the output or pauses execution.",
+    example: `mewing(1000); // Wait 1 second`,
+    category: "Control Flow"
+  },
+  {
+    id: "grimace_shake",
+    title: "grimace_shake",
+    aliases: ["fatal error", "crash", "poison", "throw"],
+    description: "Triggers a fatal error or crash.",
+    example: `sus (critical_failure) {\n    grimace_shake;\n}`,
+    category: "Control Flow"
+  },
+  {
+    id: "goon",
+    title: "goon",
+    aliases: ["infinite loop", "forever"],
+    description: "Enter an infinite loop.",
+    example: `goon {\n    spill_tea("Never ends");\n}`,
+    category: "Control Flow"
+  },
+  {
+    id: "edge",
+    title: "edge",
+    aliases: ["yield", "almost finish", "pause"],
+    description: "Yields the current process, coming close to the end but not quite.",
+    example: `edge;`,
+    category: "Control Flow"
   }
 ];
