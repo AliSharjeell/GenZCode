@@ -133,12 +133,12 @@ export default function Home() {
       
       {/* Sidebar - File Explorer */}
       <aside className="w-64 border-r border-white/5 bg-transparent flex flex-col shrink-0">
-        <div className="p-4 border-b border-zinc-900 flex items-center justify-between">
+        <div className="p-4 border-b border-zinc-900/50 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
+            <h2 className="text-base font-semibold tracking-wide text-zinc-300">EXPLORER</h2>
           </div>
           <button onClick={handleCreateFile} className="text-zinc-400 hover:text-zinc-100 transition-colors">
-            <Plus size={16} />
+            <Plus size={18} />
           </button>
         </div>
         
@@ -147,12 +147,12 @@ export default function Home() {
             <div
               key={file.id}
               onClick={() => setActiveFileId(file.id)}
-              className={`w-full text-left px-4 py-2 text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer group ${
+              className={`w-full text-left px-4 py-2.5 text-base flex items-center justify-between gap-2 transition-colors cursor-pointer group ${
                 activeFileId === file.id ? "bg-zinc-900 text-zinc-100 font-medium" : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-300"
               }`}
             >
               <div className="flex items-center gap-2 overflow-hidden w-full">
-                <FileCode2 size={14} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
+                <FileCode2 size={16} className={activeFileId === file.id ? "text-zinc-100 shrink-0" : "text-zinc-500 shrink-0"} />
                 {editingFileId === file.id ? (
                   <form onSubmit={(e) => { e.preventDefault(); handleFinishRename(); }} className="flex-1 min-w-0">
                     <input
@@ -162,7 +162,7 @@ export default function Home() {
                       onChange={(e) => setEditingName(e.target.value)}
                       onBlur={() => handleFinishRename()}
                       onClick={(e) => e.stopPropagation()}
-                      className="w-full bg-zinc-950 border border-zinc-700 rounded px-1 text-zinc-100 text-xs py-0.5 focus:outline-none focus:border-zinc-500"
+                      className="w-full bg-zinc-950 border border-zinc-700 rounded px-2 text-zinc-100 text-sm py-1 focus:outline-none focus:border-zinc-500"
                     />
                   </form>
                 ) : (
@@ -171,13 +171,13 @@ export default function Home() {
               </div>
               
               {!editingFileId && (
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={(e) => handleStartRename(file, e)} className="p-1 hover:text-zinc-100 text-zinc-500">
-                    <Edit2 size={12} />
+                    <Edit2 size={14} />
                   </button>
                   {files.length > 1 && (
                     <button onClick={(e) => handleDeleteFile(file.id, e)} className="p-1 hover:text-red-400 text-zinc-500">
-                      <Trash2 size={12} />
+                      <Trash2 size={14} />
                     </button>
                   )}
                 </div>
@@ -193,17 +193,17 @@ export default function Home() {
         {/* Header */}
         <header className="flex items-center justify-between px-6 py-3 shrink-0 bg-transparent">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
-              <FileCode2 size={14} className="text-zinc-400" />
+            <div className="flex items-center gap-2 text-base text-zinc-300 bg-zinc-900/50 px-3 py-1.5 rounded-md border border-zinc-800">
+              <FileCode2 size={16} className="text-zinc-400" />
               <span className="font-mono">{activeFile.name}</span>
             </div>
           </div>
           <Button 
             onClick={handleRun}
             disabled={isRunning}
-            className="bg-zinc-100 text-zinc-900 hover:bg-zinc-200 transition-colors font-medium px-4 h-8 rounded-md shadow-sm flex items-center gap-2"
+            className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800 border border-zinc-700 transition-colors font-medium px-5 h-9 rounded-md shadow-sm flex items-center gap-2"
           >
-            <Play size={14} />
+            <Play size={16} fill="currentColor" />
             {isRunning ? "Running..." : "Run Code"}
           </Button>
         </header>
