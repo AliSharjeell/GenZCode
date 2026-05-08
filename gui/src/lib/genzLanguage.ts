@@ -7,7 +7,7 @@ export function setupGenZLanguage(monaco: Monaco) {
   // Syntax highlighting
   monaco.languages.setMonarchTokensProvider("genz", {
     controlKeywords: [
-      "sus", "deadass", "keep_yapping", "goon", "ratio", "bet", "nvm", "slay", "bounce", "next_up", "edge", "skibidi"
+      "sus", "deadass", "keep_yapping", "goon", "yapping_through", "ratio", "bet", "nvm", "slay", "bounce", "next_up", "edge", "skibidi"
     ],
     typeKeywords: [
       "num", "txt"
@@ -76,6 +76,7 @@ export function setupGenZLanguage(monaco: Monaco) {
         { label: "grimace_shake", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "grimace_shake", detail: "Fatal error / Poison" },
         { label: "goon", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "goon", detail: "Infinite loop" },
         { label: "edge", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "edge", detail: "Almost finish / Yield" },
+        { label: "yapping_through", kind: monaco.languages.CompletionItemKind.Keyword, insertText: "yapping_through (${1:init}; ${2:condition}; ${3:update}) {\n\t$0\n}", insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet, detail: "For loop" },
       ];
       return { suggestions };
     }
@@ -114,7 +115,8 @@ export function setupGenZLanguage(monaco: Monaco) {
         "mewing": "### `mewing`\nSilences the output or pauses execution.",
         "grimace_shake": "### `grimace_shake`\nTriggers a fatal error or crash.",
         "goon": "### `goon`\nEnter an infinite loop.",
-        "edge": "### `edge`\nYields the current process, coming close to the end but not quite."
+        "edge": "### `edge`\nYields the current process, coming close to the end but not quite.",
+        "yapping_through": "### `yapping_through`\nA C-style for loop.\n\nExample: `yapping_through (lowkey i: num = 0; i < 5; i = i + 1) { ... }`"
       };
       
       if (docs[word.word]) {
