@@ -332,6 +332,21 @@ class TestParser:
 
         assert len(ast.statements) == 2
 
+    def test_error_recovery_collects_errors(self):
+        """Test that parser collects multiple errors and continues."""
+        source = "lowkey x: = ; lowkey y: num = 10;"
+        tokens = tokenize(source)
+        parser = Parser(tokens)
+        with pytest.raises(ParserError):
+            parser.parse()
+        assert len(parser.errors) >= 1
+
+    def test_error_recovery_parses_after_error(self):
+        """Test that parser can parse valid code after an error."""
+        source = "lowkey x: num = 42; sus (no_cap) { }"
+        ast = self._parse(source)
+        assert len(ast.statements) == 2
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

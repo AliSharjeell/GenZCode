@@ -24,16 +24,35 @@ class ParserError(Exception):
 class Parser:
     """Recursive descent parser for GenZ language."""
 
+    # Tokens that indicate the start of a new statement (synchronization set)
+    STATEMENT_STARTERS = {
+        TokenType.LOWKEY, TokenType.SPILL_TEA, TokenType.SUS,
+        TokenType.KEEP_YAPPING, TokenType.YAPPING_THROUGH, TokenType.VIBE_CHECK,
+        TokenType.SLAY, TokenType.BOUNCE, TokenType.NEXT_UP, TokenType.RATIO,
+        TokenType.LBRACE, TokenType.RBRACE, TokenType.GOON,
+        TokenType.TUNG_TUNG_TUNG_SAHUR, TokenType.SKIBIDI_TOILET,
+        TokenType.OHIO, TokenType.GRIMACE_SHAKE, TokenType.EDGE,
+    }
+
     def __init__(self, tokens: list[Token]):
         self.tokens = tokens
         self.current = 0
+        self.errors: list[ParserError] = []
 
     def parse(self) -> Program:
         """Parse the token stream into a Program AST."""
         statements: list[ASTNode] = []
+        self.errors = []
 
         while not self._is_at_end():
-            statements.append(self._statement())
+            try:
+                statements.append(self._statement())
+            except ParserError as e:
+                self.errors.append(e)
+                self._synchronize()
+
+        if self.errors:
+            raise self.errors[0]
 
         return Program(statements=statements)
 
@@ -522,6 +541,19 @@ class Parser:
         """Create a parser error at current token."""
         token = self._peek()
         return ParserError(message, token)
+
+    def _synchronize(self) -> None:
+        """Synchronize after an error by skipping tokens until a statement boundary."""
+        self._advance()  # Skip the erroneous token
+
+        while not self._is_at_end():
+            if self._previous().type == TokenType.SEMI:
+                return
+
+            if self._peek().type in self.STATEMENT_STARTERS:
+                return
+
+            self._advance()
 
 
 def parse(source: str) -> Program:
