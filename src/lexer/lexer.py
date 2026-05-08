@@ -124,12 +124,33 @@ class Lexer:
                     raise LexerError(f"Unexpected character: '{c}'", self.line, self.start_column)
 
     def _string(self) -> None:
-        """Parse a string literal."""
+        """Parse a string literal with escape sequence support."""
+        result = []
         while self._peek() != '"' and not self._is_at_end():
-            if self._peek() == '\n':
+            c = self._peek()
+            if c == '\n':
                 self.line += 1
                 self.column = 1
-            self._advance()
+            if c == '\\' and self._peek_next() != '\0':
+                self._advance()  # consume backslash
+                esc = self._advance()
+                if esc == 'n':
+                    result.append('\n')
+                elif esc == 't':
+                    result.append('\t')
+                elif esc == '\\':
+                    result.append('\\')
+                elif esc == '"':
+                    result.append('"')
+                elif esc == 'r':
+                    result.append('\r')
+                elif esc == '0':
+                    result.append('\0')
+                else:
+                    result.append('\\')
+                    result.append(esc)
+            else:
+                result.append(self._advance())
 
         if self._is_at_end():
             raise LexerError("Unterminated string literal", self.line, self.start_column)
@@ -137,8 +158,8 @@ class Lexer:
         # Consume closing quote
         self._advance()
 
-        # Extract string content (without quotes)
-        value = self.source[self.start + 1 : self.current - 1]
+        # Build string value from parsed escape sequences
+        value = ''.join(result)
         self._add_token(TokenType.STRING, value)
 
     def _number(self) -> None:

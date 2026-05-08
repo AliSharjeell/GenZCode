@@ -145,6 +145,48 @@ class TestLexer:
             lexer.tokenize()
         assert "Unexpected character" in str(exc_info.value)
 
+    def test_string_escape_newline(self):
+        """Test \\n escape sequence in strings."""
+        lexer = Lexer('"hello\\nworld"')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == "hello\nworld"
+
+    def test_string_escape_tab(self):
+        """Test \\t escape sequence in strings."""
+        lexer = Lexer('"hello\\tworld"')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == "hello\tworld"
+
+    def test_string_escape_backslash(self):
+        """Test \\\\ escape sequence in strings."""
+        lexer = Lexer('"hello\\\\world"')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == "hello\\world"
+
+    def test_string_escape_quote(self):
+        """Test \\\" escape sequence in strings."""
+        lexer = Lexer('"hello\\"world\\""')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == 'hello"world"'
+
+    def test_string_escape_carriage_return(self):
+        """Test \\r escape sequence in strings."""
+        lexer = Lexer('"hello\\rworld"')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == "hello\rworld"
+
+    def test_string_mixed_escapes(self):
+        """Test multiple escape sequences in one string."""
+        lexer = Lexer('"a\\nb\\tc\\\\d"')
+        tokens = lexer.tokenize()
+        assert tokens[0].type == TokenType.STRING
+        assert tokens[0].literal == "a\nb\tc\\d"
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
