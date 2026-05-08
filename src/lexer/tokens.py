@@ -42,6 +42,7 @@ class TokenType(Enum):
     GRIMACE_SHAKE = auto()
     GOON = auto()
     EDGE = auto()
+    YAPPING_THROUGH = auto()  # for loop
 
     # Operators
     PLUS = auto()        # +
@@ -106,6 +107,7 @@ KEYWORDS = {
     'grimace_shake': TokenType.GRIMACE_SHAKE,
     'goon': TokenType.GOON,
     'edge': TokenType.EDGE,
+    'yapping_through': TokenType.YAPPING_THROUGH,
 }
 
 

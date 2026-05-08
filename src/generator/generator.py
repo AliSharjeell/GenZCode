@@ -6,7 +6,7 @@ Generator Gary's work: translate the AST into Python code.
 from typing import Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ForStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall
 )
@@ -227,6 +227,38 @@ class CodeGenerator(ASTVisitor):
         old_in_loop = self.in_loop
         self.in_loop = True
         self.visit(node.body)
+        self.in_loop = old_in_loop
+        self.indent_level -= 1
+
+        return None
+
+    def visit_for_stmt(self, node: ForStmt) -> object:
+        init_code = ""
+        if node.init:
+            if isinstance(node.init, VarDecl):
+                value = self._generate_expr(node.init.initializer) if node.init.initializer else ("0" if node.init.type_name == "num" else '""' if node.init.type_name == "txt" else "[]")
+                init_code = f"{node.init.name} = {value}"
+            elif isinstance(node.init, ExprStmt):
+                init_code = self._generate_expr(node.init.expression)
+
+        cond_code = self._generate_expr(node.condition) if node.condition else "True"
+        if cond_code.startswith("(") and cond_code.endswith(")"):
+            cond_code = cond_code[1:-1]
+
+        update_code = ""
+        if node.update:
+            update_code = self._generate_expr(node.update)
+
+        if init_code:
+            self._emit(init_code)
+
+        self._emit(f"while {cond_code}:")
+        self.indent_level += 1
+        old_in_loop = self.in_loop
+        self.in_loop = True
+        self.visit(node.body)
+        if update_code:
+            self._emit(update_code)
         self.in_loop = old_in_loop
         self.indent_level -= 1
 

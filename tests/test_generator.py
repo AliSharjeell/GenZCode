@@ -235,6 +235,14 @@ class TestCodeGenerator:
         assert "while x > 0:" in code
         assert "print(x)" in code
 
+    def test_for_statement(self):
+        """Test generating for-loop statement."""
+        source = "yapping_through (lowkey i: num = 0; i < 5; i = i + 1) { spill_tea(i); }"
+        code = self._generate(source)
+        assert "i = 0" in code
+        assert "while" in code
+        assert "print(i)" in code
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

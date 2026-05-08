@@ -8,7 +8,7 @@ from src.lexer.lexer import Lexer, LexerError
 from src.lexer.tokens import Token, TokenType
 from .ast import (
     ASTNode, Program, VarDecl, FuncDecl, FuncParam, Assignment, PrintStmt,
-    IfStmt, SwitchStmt, WhileStmt, ReturnStmt, BreakStmt, ContinueStmt, ExprStmt, Block,
+    IfStmt, SwitchStmt, WhileStmt, ForStmt, ReturnStmt, BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
 
@@ -115,6 +115,8 @@ class Parser:
             return self._if_statement()
         elif self._match(TokenType.KEEP_YAPPING):
             return self._while_statement()
+        elif self._match(TokenType.YAPPING_THROUGH):
+            return self._for_statement()
         elif self._match(TokenType.GOON):
             return self._goon_statement()
         elif self._match(TokenType.TUNG_TUNG_TUNG_SAHUR):
@@ -200,6 +202,36 @@ class Parser:
         body = self._statement()
 
         return WhileStmt(condition=condition, body=body)
+
+    def _for_statement(self) -> ForStmt:
+        """Parse: yapping_through ( init ; condition ; update ) statement"""
+        self._consume(TokenType.LPAREN, "Expected '(' after 'yapping_through'")
+
+        init: Optional[ASTNode] = None
+        if not self._check(TokenType.SEMI):
+            if self._match(TokenType.LOWKEY):
+                init = self._variable_declaration()
+            else:
+                expr = self._expression()
+                self._consume(TokenType.SEMI, "Expected ';' after for-loop init")
+                init = ExprStmt(expression=expr)
+        else:
+            self._consume(TokenType.SEMI, "Expected ';' after for-loop init")
+
+        condition: Optional[Expr] = None
+        if not self._check(TokenType.SEMI):
+            condition = self._expression()
+        self._consume(TokenType.SEMI, "Expected ';' after for-loop condition")
+
+        update: Optional[Expr] = None
+        if not self._check(TokenType.RPAREN):
+            update = self._expression()
+
+        self._consume(TokenType.RPAREN, "Expected ')' after for-loop update")
+
+        body = self._statement()
+
+        return ForStmt(init=init, condition=condition, update=update, body=body)
 
     def _goon_statement(self) -> WhileStmt:
         """Parse: goon statement"""

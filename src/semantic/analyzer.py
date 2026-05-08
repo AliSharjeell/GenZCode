@@ -6,7 +6,7 @@ Semantic Sam's work: type checking, scope management, and validation.
 from typing import Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ForStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
@@ -284,6 +284,36 @@ class SemanticAnalyzer(ASTVisitor):
         # Exit loop scope
         self.symbol_table.pop_scope()
         self.symbol_table.exit_loop()
+
+        return None
+
+    def visit_for_stmt(self, node: ForStmt) -> object:
+        # Enter a scope for the for-loop (init variable should be scoped here)
+        self.symbol_table.push_scope(name="for")
+
+        # Analyze init
+        if node.init:
+            self.visit(node.init)
+
+        # Check condition type
+        if node.condition:
+            self._get_expr_type(node.condition)
+
+        # Enter loop scope for body
+        self.symbol_table.enter_loop()
+        self.symbol_table.push_scope(name="for_body")
+
+        # Analyze update
+        if node.update:
+            self._get_expr_type(node.update)
+
+        # Analyze body
+        self.visit(node.body)
+
+        # Exit loop and for scopes
+        self.symbol_table.pop_scope()
+        self.symbol_table.exit_loop()
+        self.symbol_table.pop_scope()
 
         return None
 

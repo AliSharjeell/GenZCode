@@ -5,7 +5,7 @@ from src.lexer import tokenize
 from src.parser.parser import Parser, ParserError
 from src.parser.ast import (
     Program, VarDecl, FuncDecl, FuncParam, Literal, Variable, Binary, Unary, PrintStmt, IfStmt,
-    WhileStmt, ReturnStmt, BreakStmt, ContinueStmt, Assignment, ArrayAccess,
+    WhileStmt, ForStmt, ReturnStmt, BreakStmt, ContinueStmt, Assignment, ArrayAccess,
     ArrayLiteral, Block, ExprStmt, FuncCall
 )
 
@@ -138,6 +138,33 @@ class TestParser:
         assert isinstance(while_stmt, WhileStmt)
         assert isinstance(while_stmt.condition, Binary)
         assert while_stmt.condition.operator == ">"
+
+    def test_for_statement(self):
+        """Test parsing: yapping_through (init; cond; update) { ... }"""
+        ast = self._parse("""
+            yapping_through (lowkey i: num = 0; i < 5; i = i + 1) {
+                spill_tea(i);
+            }
+        """)
+
+        for_stmt = ast.statements[0]
+        assert isinstance(for_stmt, ForStmt)
+        assert for_stmt.init is not None
+        assert for_stmt.condition is not None
+        assert for_stmt.update is not None
+        assert isinstance(for_stmt.condition, Binary)
+
+    def test_for_statement_no_init(self):
+        """Test for-loop with empty init."""
+        ast = self._parse("""
+            yapping_through (; i < 5; i = i + 1) {
+                spill_tea(i);
+            }
+        """)
+        for_stmt = ast.statements[0]
+        assert isinstance(for_stmt, ForStmt)
+        assert for_stmt.init is None
+        assert for_stmt.condition is not None
 
     def test_return_statement(self):
         """Test parsing: slay x + y;"""
@@ -275,6 +302,25 @@ class TestParser:
         assert isinstance(func_call, FuncCall)
         assert func_call.name == "greet"
         assert len(func_call.arguments) == 1
+
+    def test_else_if_chain(self):
+        """Test parsing: sus (...) { } deadass sus (...) { } deadass { }"""
+        ast = self._parse("""
+            lowkey x: num = 5;
+            sus (x > 10) {
+                spill_tea(1);
+            } deadass sus (x > 3) {
+                spill_tea(2);
+            } deadass {
+                spill_tea(3);
+            }
+        """)
+
+        if_stmt = ast.statements[1]
+        assert isinstance(if_stmt, IfStmt)
+        assert isinstance(if_stmt.else_branch, IfStmt)
+        assert isinstance(if_stmt.else_branch.then_branch, Block)
+        assert isinstance(if_stmt.else_branch.else_branch, Block)
 
     def test_comments_ignored(self):
         """Test that comments don't interfere with parsing."""

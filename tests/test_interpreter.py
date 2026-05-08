@@ -257,6 +257,61 @@ class TestInterpreter:
         """Test pow() builtin function."""
         self._run("lowkey x: num = pow(2, 3);")
 
+    def test_else_if_chain(self, capsys):
+        """Test else-if chain: sus ... deadass sus ... deadass."""
+        self._run("""
+            lowkey x: num = 5;
+            sus (x > 10) {
+                spill_tea("big");
+            } deadass sus (x > 3) {
+                spill_tea("medium");
+            } deadass {
+                spill_tea("small");
+            }
+        """)
+        captured = capsys.readouterr()
+        assert "medium" in captured.out
+        assert "big" not in captured.out
+        assert "small" not in captured.out
+
+    def test_else_if_falls_to_else(self, capsys):
+        """Test that else-if falls through to else when no condition matches."""
+        self._run("""
+            lowkey x: num = 1;
+            sus (x > 10) {
+                spill_tea("big");
+            } deadass sus (x > 5) {
+                spill_tea("medium");
+            } deadass {
+                spill_tea("small");
+            }
+        """)
+        captured = capsys.readouterr()
+        assert "small" in captured.out
+        assert "big" not in captured.out
+        assert "medium" not in captured.out
+
+    def test_for_loop(self, capsys):
+        """Test yapping_through for-loop."""
+        self._run("yapping_through (lowkey i: num = 0; i < 3; i = i + 1) { spill_tea(i); }")
+        captured = capsys.readouterr()
+        assert "0" in captured.out
+        assert "1" in captured.out
+        assert "2" in captured.out
+
+    def test_for_loop_with_break(self, capsys):
+        """Test for-loop with bounce (break)."""
+        self._run("yapping_through (lowkey i: num = 0; i < 10; i = i + 1) { sus (i == 3) { bounce; } spill_tea(i); }")
+        captured = capsys.readouterr()
+        assert "0" in captured.out
+
+    def test_for_loop_with_continue(self, capsys):
+        """Test for-loop with next_up (continue)."""
+        self._run("yapping_through (lowkey i: num = 0; i < 5; i = i + 1) { sus (i == 2) { next_up; } spill_tea(i); }")
+        captured = capsys.readouterr()
+        assert "0" in captured.out
+        assert "1" in captured.out
+
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

@@ -6,7 +6,7 @@ Actually executes GenZ code directly instead of generating Python.
 from typing import Any, Optional
 from src.parser.ast import (
     ASTVisitor, Program, VarDecl, FuncDecl, FuncParam,
-    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ReturnStmt,
+    Assignment, PrintStmt, IfStmt, SwitchStmt, WhileStmt, ForStmt, ReturnStmt,
     BreakStmt, ContinueStmt, ExprStmt, Block,
     Binary, Unary, Literal, Variable, ArrayAccess, ArrayLiteral, FuncCall, Expr
 )
@@ -128,6 +128,34 @@ class Interpreter(ASTVisitor):
                     pass  # Continue to next iteration
         finally:
             self.in_loop = False
+        return None
+
+    def visit_for_stmt(self, node: ForStmt) -> object:
+        # Execute init in a new scope
+        old_env = self.environment
+        self.environment = Environment(parent=old_env)
+        try:
+            if node.init:
+                self.visit(node.init)
+
+            self.in_loop = True
+            try:
+                while node.condition is None or self._is_truthy(self._evaluate_expr(node.condition)):
+                    try:
+                        self.visit(node.body)
+                    except BreakException:
+                        break
+                    except ContinueException:
+                        pass  # Continue to next iteration
+                    finally:
+                        pass
+
+                    if node.update:
+                        self._evaluate_expr(node.update)
+            finally:
+                self.in_loop = False
+        finally:
+            self.environment = old_env
         return None
 
     def visit_block(self, node: Block) -> object:

@@ -59,6 +59,10 @@ class ASTVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_for_stmt(self, node: ForStmt) -> object:
+        pass
+
+    @abstractmethod
     def visit_return_stmt(self, node: ReturnStmt) -> object:
         pass
 
@@ -203,6 +207,19 @@ class WhileStmt(ASTNode):
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_while_stmt(self)
+
+
+@dataclass
+class ForStmt(ASTNode):
+    """For loop: yapping_through (init; condition; update) { ... }"""
+
+    init: Optional[ASTNode] = None
+    condition: Optional[Expr] = None
+    update: Optional[Expr] = None
+    body: ASTNode = None
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_for_stmt(self)
 
 
 @dataclass
