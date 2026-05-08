@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Editor, { Monaco } from "@monaco-editor/react";
 import DocsViewer from "@/components/DocsViewer";
+import CompilerDemo from "@/components/CompilerDemo";
 import { setupGenZLanguage } from "@/lib/genzLanguage";
 import { Button } from "@/components/ui/button";
-import { FileCode2, Plus, Terminal, Play, Trash2, Edit2, Book, FilePlus } from "lucide-react";
+import { FileCode2, Plus, Terminal, Play, Trash2, Edit2, Book, FilePlus, FlaskConical } from "lucide-react";
 
 type FileData = {
   id: string;
@@ -474,7 +475,7 @@ export default function Home() {
   const [editingName, setEditingName] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"editor" | "docs">("editor");
+  const [viewMode, setViewMode] = useState<"editor" | "docs" | "demo">("editor");
 
   const activeFile = files.find(f => f.id === activeFileId) || files[0];
 
@@ -563,6 +564,10 @@ export default function Home() {
             <button onClick={() => setViewMode("docs")} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-md transition-colors w-full text-left ${viewMode === 'docs' ? 'bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'}`}>
               <Book size={16} />
               Documentation
+            </button>
+            <button onClick={() => setViewMode("demo")} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-md transition-colors w-full text-left ${viewMode === 'demo' ? 'bg-white/10 text-white font-medium shadow-sm ring-1 ring-white/5' : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'}`}>
+              <FlaskConical size={16} />
+              Demonstration
             </button>
           </div>
         </div>
@@ -677,8 +682,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          ) : (
+          ) : viewMode === "docs" ? (
             <DocsViewer />
+          ) : (
+            <CompilerDemo />
           )}
 
       </div>
