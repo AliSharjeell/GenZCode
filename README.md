@@ -66,6 +66,20 @@ keep_yapping (x > 0) {
     x = x - 1;
 }
 
+// For loop (C-style)
+yapping_through (lowkey i: num = 0; i < 5; i = i + 1) {
+    spill_tea(i);
+}
+
+// Else-if chains
+sus (x > 10) {
+    spill_tea("big");
+} deadass sus (x > 5) {
+    spill_tea("medium");
+} deadass {
+    spill_tea("small");
+}
+
 // Functions
 vibe_check factorial(n: num) {
     sus (n <= 1) {
@@ -121,7 +135,7 @@ lowkey is_sus: num = fr_fr;        // false
 | `ballerina_cappuccina` | `fancy exit` | Gracefully exit or return a fancy string |
 | `ohio` | `runtime error` | Trigger chaotic state runtime exception |
 | `grimace_shake` | `fatal error` | Trigger fatal poison crash exception |
-| `edge` | `yield` | Process edging towards completion |
+| `yapping_through` | `for` | For loop (C-style) |
 
 ## Built-in Functions
 

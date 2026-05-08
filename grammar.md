@@ -19,7 +19,8 @@ letter      ::= 'a'..'z' | 'A'..'Z' | '_'
 digit       ::= '0'..'9'
 ident       ::= letter (letter | digit)*
 number      ::= digit+
-string      ::= '"' (printable_char - '"')* '"'
+string      ::= '"' (printable_char - '"' | escape_seq)* '"'
+escape_seq  ::= '\\' ('n' | 't' | 'r' | '0' | '\\' | '"')
 comment     ::= '//' (printable_char - '\n')*
 whitespace  ::= ' ' | '\t' | '\n' | '\r'
 ```
@@ -35,6 +36,7 @@ whitespace  ::= ' ' | '\t' | '\n' | '\r'
 | `no_cap` | `true` | Boolean true |
 | `fr_fr` | `false` | Boolean false |
 | `keep_yapping` | `while` | While loop |
+| `yapping_through` | `for` | C-style for loop |
 | `goon` | `while true` | Infinite loop |
 | `spill_tea` | `print` | Output statement |
 | `vibe_check` | `function` | Function declaration |
@@ -107,6 +109,7 @@ statement       ::= var_decl
                   | print_stmt
                   | if_stmt
                   | while_stmt
+                  | for_stmt
                   | goon_stmt
                   | switch_stmt
                   | func_call
@@ -120,13 +123,14 @@ assignment      ::= ident ('[' expr ']')? '=' expr ';'
 
 print_stmt      ::= 'spill_tea' '(' expr (',' expr)* ')' ';'
 
-if_stmt         ::= 'sus' '(' expr ')' block
-                    ('deadass' block)?
-                  | 'sus' '(' expr ')' statement
+if_stmt         ::= 'sus' '(' expr ')' statement
+                    ('deadass' statement)?
 
-while_stmt      ::= 'keep_yapping' '(' expr ')' block
+while_stmt      ::= 'keep_yapping' '(' expr ')' statement
 
-goon_stmt       ::= 'goon' block
+for_stmt        ::= 'yapping_through' '(' (var_decl | expr_stmt)? ';' expr? ';' expr? ')' statement
+
+goon_stmt       ::= 'goon' statement
 
 switch_stmt     ::= 'ratio' '(' expr ')' '{'
                     ('bet' expr ':' '{' statement* '}')*
