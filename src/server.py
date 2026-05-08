@@ -8,6 +8,16 @@ from src.interpreter.interpreter import Interpreter
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return jsonify({
+        "service": "GenZCode Studio API",
+        "status": "running",
+        "endpoints": {
+            "POST /run": "Execute GenZCode and return output"
+        }
+    })
+
 @app.route('/run', methods=['POST'])
 def run_code():
     data = request.json
