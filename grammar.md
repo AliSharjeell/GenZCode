@@ -35,11 +35,25 @@ whitespace  ::= ' ' | '\t' | '\n' | '\r'
 | `no_cap` | `true` | Boolean true |
 | `fr_fr` | `false` | Boolean false |
 | `keep_yapping` | `while` | While loop |
+| `goon` | `while true` | Infinite loop |
 | `spill_tea` | `print` | Output statement |
 | `vibe_check` | `function` | Function declaration |
 | `slay` | `return` | Return statement |
-| `bestie` | `break` | Break loop |
-| `its_giving` | `continue` | Continue loop |
+| `bounce` / `bestie` | `break` | Break loop |
+| `next_up` / `its_giving` | `continue` | Continue loop |
+| `ratio` | `switch` | Switch statement |
+| `bet` | `case` | Case in switch |
+| `nvm` | `default` | Default case |
+| `rizz` | `add/mutate` | Add 10.0 to numeric value |
+| `fanum_tax` | `sub/mutate` | Reduce by 20% tax |
+| `skibidi` | `evil/loop` | Evil loop or bad state |
+| `skibidi_toilet` | `garbage collect` | Clean up virtual memory |
+| `tung_tung_tung_sahur` | `initialize` | Wake up / Initialize |
+| `ballerina_cappuccina` | `fancy exit` | Graceful fancy string |
+| `mewing` | `sleep` | Pause execution (ms) |
+| `ohio` | `runtime error` | Chaotic runtime exception |
+| `grimace_shake` | `fatal error` | Fatal crash exception |
+| `edge` | `yield` | Edging towards completion |
 
 ### Operators
 ```ebnf
@@ -93,10 +107,13 @@ statement       ::= var_decl
                   | print_stmt
                   | if_stmt
                   | while_stmt
+                  | goon_stmt
+                  | switch_stmt
                   | func_call
                   | return_stmt
                   | break_stmt
                   | continue_stmt
+                  | brainrot_stmt
                   | block
 
 assignment      ::= ident ('[' expr ']')? '=' expr ';'
@@ -109,16 +126,30 @@ if_stmt         ::= 'sus' '(' expr ')' block
 
 while_stmt      ::= 'keep_yapping' '(' expr ')' block
 
+goon_stmt       ::= 'goon' block
+
+switch_stmt     ::= 'ratio' '(' expr ')' '{'
+                    ('bet' expr ':' '{' statement* '}')*
+                    ('nvm' ':' '{' statement* '}')?
+                    '}'
+
 block           ::= '{' statement* '}'
 
 return_stmt     ::= 'slay' expr? ';'
 
-break_stmt      ::= 'bestie' ';'
+break_stmt      ::= ('bounce' | 'bestie') ';'
 
-continue_stmt   ::= 'its_giving' ';'
+continue_stmt   ::= ('next_up' | 'its_giving') ';'
 
 func_call       ::= ident '(' args? ')' ';'
 args            ::= expr (',' expr)*
+
+brainrot_stmt   ::= 'tung_tung_tung_sahur' '('? ')'? ';'
+                  | 'skibidi_toilet' '('? ')'? ';'
+                  | 'ohio' '('? ')'? ';'
+                  | 'grimace_shake' '('? ')'? ';'
+                  | 'edge' '('? ')'? ';'
+                  | 'skibidi' '('? ')'? ';'
 
 expr            ::= logic_or
 

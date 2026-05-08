@@ -61,7 +61,18 @@ def compile_file(input_path: str, output_path: str = None, run: bool = False, in
         # Run if requested
         if run:
             print("--- Running Generated Code ---")
-            exec(code, {"__name__": "__main__"})
+            safe_builtins = {
+                'abs': abs, 'bool': bool, 'float': float, 'input': input,
+                'int': int, 'len': len, 'list': list, 'max': max, 'min': min,
+                'print': print, 'range': range, 'round': round, 'str': str,
+                'sum': sum, 'type': type, 'True': True, 'False': False, 'None': None,
+                'RuntimeError': RuntimeError, 'NotImplementedError': NotImplementedError,
+            }
+            restricted_globals = {
+                "__name__": "__main__",
+                "__builtins__": safe_builtins,
+            }
+            exec(code, restricted_globals)
 
 
 def run_string(source: str) -> None:

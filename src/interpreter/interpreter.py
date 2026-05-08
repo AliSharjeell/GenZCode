@@ -12,15 +12,9 @@ from src.parser.ast import (
 )
 from .environment import (
     Environment, RuntimeValue, UserFunction, BuiltinFunction,
-    ReturnValue, BreakException, ContinueException, Builtins
+    ReturnValue, BreakException, ContinueException, Builtins,
+    InterpreterError
 )
-
-
-class InterpreterError(Exception):
-    """Raised when runtime error occurs."""
-    def __init__(self, message: str):
-        self.message = message
-        super().__init__(f"Runtime error: {message}")
 
 
 class Interpreter(ASTVisitor):
@@ -137,11 +131,14 @@ class Interpreter(ASTVisitor):
         return None
 
     def visit_block(self, node: Block) -> object:
-        # Blocks don't create new scopes - they execute in current scope
-        # Only functions create new scopes
+        old_env = self.environment
+        self.environment = Environment(parent=old_env)
         result = None
-        for stmt in node.statements:
-            result = self.visit(stmt)
+        try:
+            for stmt in node.statements:
+                result = self.visit(stmt)
+        finally:
+            self.environment = old_env
         return result
 
     def visit_return_stmt(self, node: ReturnStmt) -> object:
@@ -177,14 +174,6 @@ class Interpreter(ASTVisitor):
 
     def visit_expr_stmt(self, node: ExprStmt) -> object:
         return self._evaluate_expr(node.expression)
-
-    def visit_block(self, node: Block) -> object:
-        # Blocks don't create new scopes - they execute in current scope
-        # Only functions create new scopes
-        result = None
-        for stmt in node.statements:
-            result = self.visit(stmt)
-        return result
 
     # -------------------------------------------------------------------------
     # Visitor Methods - Expressions

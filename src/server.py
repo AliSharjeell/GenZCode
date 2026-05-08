@@ -20,8 +20,12 @@ def index():
 
 @app.route('/run', methods=['POST'])
 def run_code():
+    if not request.is_json:
+        return jsonify({"output": "Error: Request must be JSON"}), 400
     data = request.json
-    code = data.get("code", "")
+    if not data or "code" not in data:
+        return jsonify({"output": "Error: Missing 'code' field in JSON body"}), 400
+    code = data["code"]
     
     # Capture standard output
     output_buffer = io.StringIO()

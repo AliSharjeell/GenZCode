@@ -46,11 +46,66 @@ class CodeGenerator(ASTVisitor):
     # Visitor Methods
     # -------------------------------------------------------------------------
 
+    def _emit_brainrot_helpers(self) -> None:
+        """Emit helper functions for brainrot builtins."""
+        self._emit_no_indent("import time")
+        self._emit("")
+        self._emit_no_indent("")
+        self._emit("def ohio():")
+        self.indent_level += 1
+        self._emit('raise RuntimeError("Down in Ohio, swag like Ohio. Chaotic state detected!")')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def grimace_shake():")
+        self.indent_level += 1
+        self._emit('raise RuntimeError("Code poisoned by Grimace Shake! Fatal crash...")')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def ballerina_cappuccina():")
+        self.indent_level += 1
+        self._emit('return "Fancy Ballerina Cappuccina"')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def mewing(ms=1000.0):")
+        self.indent_level += 1
+        self._emit("time.sleep(ms / 1000.0)")
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def rizz(val):")
+        self.indent_level += 1
+        self._emit("return float(val) + 10.0")
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def fanum_tax(val):")
+        self.indent_level += 1
+        self._emit("return float(val) * 0.8")
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def tung_tung_tung_sahur():")
+        self.indent_level += 1
+        self._emit('print("Tung Tung Tung Sahur! Code is waking up...")')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def skibidi_toilet():")
+        self.indent_level += 1
+        self._emit('print("Memory flushed... clean as a whistle fr fr")')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("def edge():")
+        self.indent_level += 1
+        self._emit('print("Nearly there... edging the end...")')
+        self.indent_level -= 1
+        self._emit("")
+        self._emit("")
+        self.indent_level = 0
+
     def visit_program(self, node: Program) -> object:
         # Add Python shebang and imports
         self._emit_no_indent("# Generated Python code from GenZ/Brainrot language")
         self._emit_no_indent("import sys")
         self._emit("")
+
+        self._emit_brainrot_helpers()
 
         # Track if we have a main function
         has_main = False
@@ -194,11 +249,21 @@ class CodeGenerator(ASTVisitor):
         return None
 
     def visit_expr_stmt(self, node: ExprStmt) -> object:
-        expr_code = self._generate_expr(node.expression)
-        # Only emit if not a function call (function calls as statements)
-        if not isinstance(node.expression, FuncCall):
+        if isinstance(node.expression, FuncCall):
+            fn = node.expression
+            if fn.name in ('rizz', 'fanum_tax') and fn.arguments:
+                arg = fn.arguments[0]
+                if isinstance(arg, Variable):
+                    arg_code = self._generate_expr(arg)
+                    if fn.name == 'rizz':
+                        self._emit(f"{arg_code} = {arg_code} + 10.0")
+                    else:
+                        self._emit(f"{arg_code} = {arg_code} * 0.8")
+                    return None
+            expr_code = self._generate_expr(node.expression)
             self._emit(expr_code)
         else:
+            expr_code = self._generate_expr(node.expression)
             self._emit(expr_code)
         return None
 

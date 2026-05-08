@@ -23,7 +23,9 @@ class TokenType(Enum):
     VIBE_CHECK = auto()  # function
     SLAY = auto()        # return
     BOUNCE = auto()      # break (leave the situation)
+    BESTIE = BOUNCE       # alias for bounce
     NEXT_UP = auto()     # continue (next iteration)
+    ITS_GIVING = NEXT_UP  # alias for next_up
     NO_CAP = auto()      # true
     FR_FR = auto()       # false
     RATIO = auto()       # switch
@@ -85,7 +87,9 @@ KEYWORDS = {
     'vibe_check': TokenType.VIBE_CHECK,
     'slay': TokenType.SLAY,
     'bounce': TokenType.BOUNCE,
+    'bestie': TokenType.BOUNCE,
     'next_up': TokenType.NEXT_UP,
+    'its_giving': TokenType.NEXT_UP,
     'no_cap': TokenType.NO_CAP,
     'fr_fr': TokenType.FR_FR,
     'ratio': TokenType.RATIO,

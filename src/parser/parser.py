@@ -73,7 +73,6 @@ class Parser:
 
     def _variable_declaration(self) -> VarDecl:
         """Parse: lowkey ident ':' type ('=' expr)?"""
-        self._advance()  # consume 'lowkey'
         name = self._advance().lexeme
 
         self._consume(TokenType.COLON, "Expected ':' after variable name")
@@ -156,17 +155,7 @@ class Parser:
         elif self._match(TokenType.LBRACE):
             return self._block()
         elif self._match(TokenType.LOWKEY):
-            # Variable declaration
-            name = self._advance().lexeme
-            self._consume(TokenType.COLON, "Expected ':' after variable name")
-            type_name = self._parse_type()
-
-            initializer: Optional[Expr] = None
-            if self._match(TokenType.ASSIGN):
-                initializer = self._expression()
-
-            self._consume(TokenType.SEMI, "Expected ';' after variable declaration")
-            return VarDecl(name=name, type_name=type_name, initializer=initializer)
+            return self._variable_declaration()
         else:
             # Could be an assignment or expression statement
             expr = self._expression()

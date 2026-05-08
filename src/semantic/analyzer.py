@@ -61,11 +61,16 @@ class SemanticAnalyzer(ASTVisitor):
 
     def _declare_builtin_function(self, name: str, param_count: int = -1) -> None:
         """Register a built-in function."""
-        param_types = [TypeInfo(base_type="num") for _ in range(param_count)]
+        is_variadic = param_count < 0
+        if is_variadic:
+            param_types = []
+        else:
+            param_types = [TypeInfo(base_type="num") for _ in range(param_count)]
         self.symbol_table.define_function(
             name=name,
             return_type=TypeInfo(base_type="num"),
-            param_types=param_types
+            param_types=param_types,
+            is_variadic=is_variadic
         )
 
     def _register_builtins(self) -> None:
@@ -357,7 +362,7 @@ class SemanticAnalyzer(ASTVisitor):
             raise SemanticError(f"Undefined function: '{node.name}'")
 
         # Check argument count
-        if len(node.arguments) != len(func_symbol.param_types):
+        if not func_symbol.is_variadic and len(node.arguments) != len(func_symbol.param_types):
             raise SemanticError(
                 f"Function '{node.name}' expects {len(func_symbol.param_types)} "
                 f"arguments, got {len(node.arguments)}"

@@ -80,6 +80,13 @@ class ContinueException(Exception):
     pass
 
 
+class InterpreterError(Exception):
+    """Raised when runtime error occurs."""
+    def __init__(self, message: str):
+        self.message = message
+        super().__init__(f"Runtime error: {message}")
+
+
 class Environment:
     """Runtime environment for variables."""
 
@@ -97,7 +104,7 @@ class Environment:
             return self.variables[name]
         if self.parent:
             return self.parent.get(name)
-        raise RuntimeError(f"Undefined variable: '{name}'")
+        raise InterpreterError(f"Undefined variable: '{name}'")
 
     def set(self, name: str, value: RuntimeValue) -> None:
         """Set a variable value (must exist)."""
@@ -106,7 +113,7 @@ class Environment:
         elif self.parent:
             self.parent.set(name, value)
         else:
-            raise RuntimeError(f"Undefined variable: '{name}'")
+            raise InterpreterError(f"Undefined variable: '{name}'")
 
     def has(self, name: str) -> bool:
         """Check if variable exists."""
@@ -205,12 +212,12 @@ class Builtins:
     @staticmethod
     def ohio_fn(args: list, interpreter: 'Interpreter') -> None:
         """Triggers a chaotic state or error condition."""
-        raise RuntimeError("Down in Ohio, swag like Ohio. Chaotic state detected!")
+        raise InterpreterError("Down in Ohio, swag like Ohio. Chaotic state detected!")
 
     @staticmethod
     def grimace_shake_fn(args: list, interpreter: 'Interpreter') -> None:
         """Triggers a fatal error or crash."""
-        raise RuntimeError("Code poisoned by Grimace Shake! Fatal crash...")
+        raise InterpreterError("Code poisoned by Grimace Shake! Fatal crash...")
 
     @staticmethod
     def mewing_fn(args: list, interpreter: 'Interpreter') -> None:

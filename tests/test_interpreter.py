@@ -128,7 +128,7 @@ class TestInterpreter:
     def test_continue_with_print_after(self, capsys):
         """Test continue statement with print after continue."""
         # print is after continue, so nothing prints
-        self._run("lowkey i: num = 0; keep_yapping (i < 3) { its_giving; spill_tea(i); i = i + 1; }")
+        self._run("lowkey i: num = 0; keep_yapping (i < 3) { i = i + 1; its_giving; spill_tea(i); }")
         captured = capsys.readouterr()
         assert captured.out == ""
 

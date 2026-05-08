@@ -66,12 +66,16 @@ spill_tea("Starting FizzBuzz up to", max);
 keep_yapping (i <= max) {
     sus (i % 15 == 0) {
         spill_tea("FizzBuzz");
-    } deadass sus (i % 3 == 0) {
-        spill_tea("Fizz");
-    } deadass sus (i % 5 == 0) {
-        spill_tea("Buzz");
     } deadass {
-        spill_tea(i);
+        sus (i % 3 == 0) {
+            spill_tea("Fizz");
+        } deadass {
+            sus (i % 5 == 0) {
+                spill_tea("Buzz");
+            } deadass {
+                spill_tea(i);
+            }
+        }
     }
     i = i + 1;
 }

@@ -34,6 +34,7 @@ class Symbol:
     name: str
     type_info: TypeInfo
     is_function: bool = False
+    is_variadic: bool = False
     is_constant: bool = False
     param_types: list[TypeInfo] = field(default_factory=list)
     return_type: Optional[TypeInfo] = None
@@ -99,7 +100,7 @@ class SymbolTable:
         return symbol
 
     def define_function(self, name: str, return_type: Optional[TypeInfo],
-                       param_types: list[TypeInfo]) -> Symbol:
+                       param_types: list[TypeInfo], is_variadic: bool = False) -> Symbol:
         """Define a function (in global scope)."""
         # Check if already defined
         existing = self.global_scope.lookup(name)
@@ -110,6 +111,7 @@ class SymbolTable:
             name=name,
             type_info=TypeInfo(base_type="function"),
             is_function=True,
+            is_variadic=is_variadic,
             defined=True,
             param_types=param_types,
             return_type=return_type
