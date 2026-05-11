@@ -41,6 +41,21 @@ python -m src.main examples/hello.genz -o output.py
 python output.py
 ```
 
+#### Run Individual Compiler Phases:
+```bash
+# Phase 1: Lexical analysis (tokenize only)
+python -m src.main examples/hello.genz --phase lexer
+
+# Phase 2: Parsing (generate AST only)
+python -m src.main examples/hello.genz --phase parser
+
+# Phase 3: Semantic analysis (symbol table only)
+python -m src.main examples/hello.genz --phase semantic
+
+# Full compilation (default)
+python -m src.main examples/hello.genz
+```
+
 ## GenZ Syntax Examples
 
 ```javascript
@@ -180,13 +195,22 @@ Source Code (.genz)
 [Parser] ──► AST
     │
     ▼
-[Semantic Analyzer] ──► Validated AST
+[Semantic Analyzer] ──► Validated AST + Symbol Table
     │
     ▼
-[Interpreter] ──► Execute (--interpret)
-         OR
-[Generator] ──► Python code (-o output.py)
+[IR Generator] ──► Three-Address Code (TAC)
+    │
+    ▼
+[Optimizer] ──► Optimized IR
+    │
+    ▼
+[Code Generator] ──► Python code
+    │
+    ▼
+[Interpreter] ──► Execute
 ```
+
+Use `--phase <name>` to run individual phases: `lexer`, `parser`, or `semantic`
 
 ## For Course Assignment
 
