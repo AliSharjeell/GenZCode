@@ -6,7 +6,7 @@ import {
   Play, ArrowRight, ArrowLeft, Zap, GitBranch,
   ShieldCheck, FileCode, Terminal, CheckCircle2,
   AlertCircle, RotateCcw, Sparkles, Cpu,
-  ChevronRight, BookOpen
+  ChevronRight, BookOpen, Edit2
 } from "lucide-react";
 
 // =============================================================================
@@ -36,6 +36,8 @@ type PipelineData = {
     tokens?: TokenItem[];
     ast?: ASTNode;
     symbol_table?: { scopes: { name: string; symbols: Record<string, any> }[] };
+    ir_code?: string;
+    optimized_ir?: string;
     python_code?: string;
     output?: string;
   }[];
@@ -47,7 +49,7 @@ type PipelineData = {
 // Short Demo Code
 // =============================================================================
 
-const DEMO_CODE = `// Check passing grade
+const DEFAULT_CODE = `// Check passing grade
 lowkey score: num = 85;
 
 sus (score >= 60) {
@@ -57,6 +59,8 @@ sus (score >= 60) {
 // =============================================================================
 // Stage Metadata
 // =============================================================================
+
+const STAGE_KEYS = ["lexer", "parser", "semantic", "intermediate", "optimizer", "generator", "interpreter"];
 
 const STAGES = [
   {
@@ -95,8 +99,26 @@ const STAGES = [
     explanation: "The Semantic Analyzer walks the AST to ensure the program makes sense. It checks that variables are declared before use, types match in assignments and expressions, function calls have valid arguments, and that control flow statements like bounce appear inside loops.",
   },
   {
+    key: "intermediate",
+    title: "Step 4: Intermediate Code",
+    subtitle: "Generating Three-Address Code",
+    icon: Cpu,
+    color: "#06b6d4",
+    bg: "rgba(6,182,212,0.08)",
+    explanation: "The Intermediate Code Generator produces Three-Address Code (TAC), a platform-independent representation. Each instruction has at most one operator, making it ideal for optimization and easier translation to target languages. This canonical form simplifies subsequent compiler phases.",
+  },
+  {
+    key: "optimizer",
+    title: "Step 5: Optimization Pass",
+    subtitle: "Optimizing the IR",
+    icon: Zap,
+    color: "#f97316",
+    bg: "rgba(249,115,22,0.08)",
+    explanation: "The Optimizer applies various transformations to the intermediate code: constant folding (evaluating constant expressions at compile time), copy propagation, dead code elimination, and strength reduction. These optimizations reduce runtime and code size without changing program semantics.",
+  },
+  {
     key: "generator",
-    title: "Step 4: Code Generation",
+    title: "Step 6: Code Generation",
     subtitle: "Translating to Python",
     icon: FileCode,
     color: "#3b82f6",
@@ -105,7 +127,7 @@ const STAGES = [
   },
   {
     key: "interpreter",
-    title: "Step 5: Execution",
+    title: "Step 7: Execution",
     subtitle: "Running the program",
     icon: Terminal,
     color: "#ec4899",
@@ -274,10 +296,14 @@ export default function CompilerDemo() {
   const [data, setData] = useState<PipelineData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [demoCode, setDemoCode] = useState(DEFAULT_CODE);
+  const [showCodeEditor, setShowCodeEditor] = useState(false);
 
   const totalSteps = STAGES.length;
   const stageMeta = STAGES[step];
-  const stageData = data?.stages?.[step - 1];
+
+  // Map stage index to stage data by matching 'name' field
+  const stageData = data?.stages?.find((s) => s.name === STAGE_KEYS[step - 1]);
 
   const startTour = async () => {
     setLoading(true);
@@ -286,11 +312,13 @@ export default function CompilerDemo() {
       const res = await fetch("/api/pipeline", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: DEMO_CODE }),
+        body: JSON.stringify({ code: demoCode }),
       });
       const json = await res.json();
       if (json.error && !json.stages?.length) {
         setError(json.error);
+      } else if (json.stages?.length === 0) {
+        setError("No stages returned from server. Check server logs.");
       } else {
         setData(json);
         setStep(1);
@@ -359,8 +387,26 @@ export default function CompilerDemo() {
 
           {/* Preview the demo code */}
           <div className="w-full">
-            <div className="text-[10px] font-medium text-zinc-600 uppercase tracking-wider mb-2 text-left">Demo Code</div>
-            <CodeBlock code={DEMO_CODE} label="GenZ Source" accent="#f59e0b" />
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-[10px] font-medium text-zinc-600 uppercase tracking-wider">Demo Code</div>
+              <button
+                onClick={() => setShowCodeEditor(!showCodeEditor)}
+                className="text-[10px] text-zinc-500 hover:text-zinc-300 flex items-center gap-1 transition-colors"
+              >
+                <Edit2 size={10} />
+                {showCodeEditor ? "Hide Editor" : "Edit Code"}
+              </button>
+            </div>
+            {showCodeEditor ? (
+              <textarea
+                value={demoCode}
+                onChange={(e) => setDemoCode(e.target.value)}
+                className="w-full h-32 px-4 py-3 bg-[#0c0c0e] border border-zinc-700 rounded-xl text-xs font-mono text-zinc-200 resize-none focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/20"
+                spellCheck={false}
+              />
+            ) : (
+              <CodeBlock code={demoCode} label="GenZ Source" accent="#f59e0b" />
+            )}
           </div>
 
           <div className="flex flex-col gap-3 w-full">
@@ -387,7 +433,7 @@ export default function CompilerDemo() {
               )}
             </button>
             <p className="text-[11px] text-zinc-600">
-              This will run the compiler pipeline and guide you through 5 stages.
+              This will run the compiler pipeline and guide you through 7 stages.
             </p>
           </div>
         </div>
@@ -444,6 +490,8 @@ export default function CompilerDemo() {
   const tokens = stageData?.tokens?.filter((t) => t.type !== "EOF") || [];
   const ast = stageData?.ast || null;
   const symTable = stageData?.symbol_table || null;
+  const irCode = stageData?.ir_code || "";
+  const optimizedIR = stageData?.optimized_ir || "";
   const pyCode = stageData?.python_code || "";
   const execOutput = stageData?.output || "";
   const hasError = stageData?.status === "error";
@@ -467,6 +515,12 @@ export default function CompilerDemo() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={resetTour}
+              className="flex items-center gap-1 px-3 py-2 rounded-lg text-xs font-medium text-zinc-500 hover:text-zinc-300 hover:bg-white/5 transition-colors"
+            >
+              <RotateCcw size={14} /> Restart
+            </button>
             <button
               onClick={prevStep}
               disabled={step <= 1}
@@ -529,12 +583,18 @@ export default function CompilerDemo() {
 
           {/* Stage-specific content */}
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
+            {!stageData ? (
+              <div className="p-8 text-center text-zinc-500">
+                No data for this stage. Please restart the tour.
+              </div>
+            ) : (
+            <>
             {/* LEXER */}
             {stageMeta.key === "lexer" && (
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Source Code</h3>
-                  <CodeBlock code={DEMO_CODE} label="Input" accent="#f59e0b" />
+                  <CodeBlock code={demoCode} label="GenZ Source" accent="#f59e0b" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
@@ -584,27 +644,69 @@ export default function CompilerDemo() {
                 <div className="flex flex-col gap-2">
                   <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Symbol Table</h3>
                   {symTable ? (
-                    <div className="flex flex-col gap-3">
-                      {symTable.scopes.map((scope, i) => (
+                    <div className="flex flex-col gap-4">
+                      {symTable.scopes.map((scope, i) => {
+                        const userSymbols = Object.values(scope.symbols).filter((s: any) => !s.is_builtin);
+                        const builtinSymbols = Object.values(scope.symbols).filter((s: any) => s.is_builtin);
+                        return (
                         <div key={i} className="flex flex-col gap-2 p-4 rounded-xl border border-emerald-500/10 bg-emerald-500/[0.02]">
                           <div className="flex items-center gap-2">
                             <ShieldCheck size={14} className="text-emerald-400" />
                             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">{scope.name} Scope</span>
-                            <span className="text-[10px] text-zinc-600">{Object.keys(scope.symbols).length} symbols</span>
+                            <span className="text-[10px] text-zinc-600">{userSymbols.length} user symbols</span>
                           </div>
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                            {Object.values(scope.symbols).slice(0, 6).map((sym: any, j) => (
-                              <div key={j} className="flex items-center justify-between p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
-                                <span className="text-xs font-mono text-zinc-200">{sym.name}</span>
-                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-zinc-400 font-mono">{sym.type}</span>
+
+                          {/* User-defined symbols */}
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-xs">
+                              <thead>
+                                <tr className="border-b border-white/5">
+                                  <th className="text-left py-2 px-3 text-zinc-500 font-medium">Name</th>
+                                  <th className="text-left py-2 px-3 text-zinc-500 font-medium">Type</th>
+                                  <th className="text-left py-2 px-3 text-zinc-500 font-medium">Kind</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {userSymbols.length > 0 ? userSymbols.map((sym: any, j) => (
+                                  <tr key={j} className="border-b border-white/5 hover:bg-white/[0.02]">
+                                    <td className="py-2 px-3 font-mono text-zinc-200">{sym.name}</td>
+                                    <td className="py-2 px-3">
+                                      <span className="px-1.5 py-0.5 rounded bg-white/5 text-cyan-400 font-mono text-[10px]">{sym.type}</span>
+                                    </td>
+                                    <td className="py-2 px-3 text-zinc-400">{sym.is_function ? "Function" : "Variable"}</td>
+                                  </tr>
+                                )) : (
+                                  <tr>
+                                    <td colSpan={3} className="py-2 px-3 text-zinc-600 text-center italic">No user-defined symbols</td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Built-in functions (collapsed by default) */}
+                          {builtinSymbols.length > 0 && (
+                            <details className="mt-2">
+                              <summary className="text-[10px] text-zinc-500 cursor-pointer hover:text-zinc-400">
+                                + {builtinSymbols.length} built-in functions (click to expand)
+                              </summary>
+                              <div className="mt-2 overflow-x-auto">
+                                <table className="w-full text-xs">
+                                  <tbody>
+                                    {builtinSymbols.map((sym: any, j) => (
+                                      <tr key={j} className="border-b border-white/5 opacity-60">
+                                        <td className="py-2 px-3 font-mono text-zinc-400">{sym.name}()</td>
+                                        <td className="py-2 px-3 text-zinc-500 text-[10px]">{sym.return_type || "any"}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
                               </div>
-                            ))}
-                          </div>
-                          {Object.keys(scope.symbols).length > 6 && (
-                            <span className="text-[10px] text-zinc-600">...and {Object.keys(scope.symbols).length - 6} more built-ins</span>
+                            </details>
                           )}
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <span className="text-xs text-zinc-600">No symbol table data.</span>
@@ -614,8 +716,87 @@ export default function CompilerDemo() {
                   <p className="text-xs text-zinc-500 leading-relaxed">
                     The symbol table tracks every variable and function. Here, <strong className="text-zinc-300">score</strong> is registered
                     as a <code className="text-zinc-400">num</code> in the global scope. Built-in functions like
-                    <code className="text-zinc-400"> print</code> and <code className="text-zinc-400">len</code> are also registered so the analyzer
+                    <code className="text-zinc-400"> print</code> and <code className="text-zinc-400"> len</code> are also registered so the analyzer
                     knows they are valid when called.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* INTERMEDIATE CODE */}
+            {stageMeta.key === "intermediate" && (
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Three-Address Code (TAC)</h3>
+                  <div className="p-4 rounded-xl border border-cyan-500/10 bg-[#0c0c0e] overflow-x-auto">
+                    {irCode ? (
+                      <div className="flex flex-col gap-0.5">
+                        {irCode.split('\n').map((line, i) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <span className="text-[10px] text-zinc-700 font-mono w-5 text-right shrink-0 select-none">{i + 1}</span>
+                            <span className="text-xs font-mono text-cyan-300 whitespace-pre">{line || " "}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-zinc-600">No IR code generated.</span>
+                    )}
+                  </div>
+                </div>
+                <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02]">
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    Three-Address Code breaks each operation into simple instructions. Each line has the form:
+                    <code className="text-cyan-400"> result = arg1 op arg2</code>. Variables are stored in temporaries like
+                    <code className="text-zinc-400">t0, t1</code>, and control flow uses labels like
+                    <code className="text-zinc-400">L0, L1</code>. This canonical form is ideal for optimization.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* OPTIMIZER */}
+            {stageMeta.key === "optimizer" && (
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Optimized vs Original IR</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <div className="text-[10px] text-zinc-600 uppercase tracking-wider mb-2">Original IR</div>
+                      <div className="p-4 rounded-xl border border-orange-500/10 bg-[#0c0c0e] overflow-x-auto">
+                        {irCode ? (
+                          <div className="flex flex-col gap-0.5">
+                            {irCode.split('\n').map((line, i) => (
+                              <div key={i} className="flex items-start gap-3">
+                                <span className="text-[10px] text-zinc-700 font-mono w-5 text-right shrink-0 select-none">{i + 1}</span>
+                                <span className="text-xs font-mono text-zinc-400 whitespace-pre">{line || " "}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : <span className="text-xs text-zinc-600">No IR code.</span>}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-emerald-500/80 uppercase tracking-wider mb-2">Optimized IR</div>
+                      <div className="p-4 rounded-xl border border-emerald-500/10 bg-[#0c0c0e] overflow-x-auto">
+                        {optimizedIR ? (
+                          <div className="flex flex-col gap-0.5">
+                            {optimizedIR.split('\n').map((line, i) => (
+                              <div key={i} className="flex items-start gap-3">
+                                <span className="text-[10px] text-zinc-700 font-mono w-5 text-right shrink-0 select-none">{i + 1}</span>
+                                <span className="text-xs font-mono text-emerald-300 whitespace-pre">{line || " "}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : <span className="text-xs text-zinc-600">No optimizations applied.</span>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02]">
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    The optimizer applies <strong className="text-zinc-300">constant folding</strong> (evaluating constant expressions at compile time),
+                    <strong className="text-zinc-300"> copy propagation</strong> (replacing variables with their known values), and
+                    <strong className="text-zinc-300"> dead code elimination</strong> (removing unreachable code). These transformations preserve semantics while improving efficiency.
                   </p>
                 </div>
               </div>
@@ -627,7 +808,7 @@ export default function CompilerDemo() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
                     <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">GenZ Source</h3>
-                    <CodeBlock code={DEMO_CODE} label="Input" accent="#f59e0b" />
+                    <CodeBlock code={demoCode} label="Input" accent="#f59e0b" />
                   </div>
                   <div className="flex flex-col gap-2">
                     <h3 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Generated Python</h3>
@@ -669,6 +850,8 @@ export default function CompilerDemo() {
                 </div>
                 <p className="text-xs text-zinc-400 font-mono">{stageData.error}</p>
               </div>
+            )}
+            </>
             )}
           </div>
         </div>
