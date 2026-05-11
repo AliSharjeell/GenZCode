@@ -2,9 +2,15 @@
 """GenZ/Brainrot Programming Language Compiler.
 
 Usage:
-    python -m src.main input.genz
-    python -m src.main input.genz -o output.py
-    python -m src.main input.genz --run  # compile and run
+    python -m src.main input.genz          # compile to Python (print output)
+    python -m src.main input.genz -o out.py  # compile to file
+    python -m src.main input.genz --run    # compile and run
+    python -m src.main input.genz --interpret  # interpret directly
+
+Phase flags (run up to a specific phase):
+    python -m src.main input.genz --phase lexer   # tokenize only
+    python -m src.main input.genz --phase parser  # parse only
+    python -m src.main input.genz --phase semantic  # analyze only
 """
 
 import sys
@@ -17,7 +23,7 @@ from src.semantic.analyzer import SemanticAnalyzer
 from src.generator.generator import generate_python
 
 
-def compile_file(input_path: str, output_path: str = None, run: bool = False, interpret: bool = False) -> None:
+def compile_file(input_path: str, output_path: str = None, run: bool = False, interpret: bool = False, phase: str = None) -> None:
     """Compile a GenZ source file to Python or run directly."""
     # Read source
     with open(input_path, 'r', encoding='utf-8') as f:
@@ -29,9 +35,22 @@ def compile_file(input_path: str, output_path: str = None, run: bool = False, in
     print("  [1/4] Lexing...")
     tokens = tokenize(source)
 
+    if phase == "lexer":
+        print(f"\n--- Tokens ({len(tokens)}) ---")
+        for t in tokens:
+            print(f"  {t}")
+        print("--- End of Tokens ---\n")
+        return
+
     # Parsing
     print("  [2/4] Parsing...")
     ast = Parser(tokens).parse()
+
+    if phase == "parser":
+        print(f"\n--- AST ---")
+        print(ast)
+        print("--- End of AST ---\n")
+        return
 
     if interpret or run:
         # Use interpreter for direct execution
@@ -43,6 +62,10 @@ def compile_file(input_path: str, output_path: str = None, run: bool = False, in
         # Semantic analysis
         print("  [3/4] Analyzing...")
         SemanticAnalyzer().analyze(ast)
+
+        if phase == "semantic":
+            print("  Semantic analysis passed!")
+            return
 
         # Code generation
         print("  [4/4] Generating Python...")
@@ -91,11 +114,16 @@ def main():
     parser.add_argument("-o", "--output", help="Output Python file")
     parser.add_argument("-r", "--run", action="store_true", help="Run the generated code")
     parser.add_argument("-i", "--interpret", action="store_true", help="Run directly with interpreter")
+    parser.add_argument(
+        "--phase",
+        choices=["lexer", "parser", "semantic"],
+        help="Stop after the specified phase (lexer, parser, or semantic)"
+    )
 
     args = parser.parse_args()
 
     try:
-        compile_file(args.input, args.output, args.run, args.interpret)
+        compile_file(args.input, args.output, args.run, args.interpret, args.phase)
     except FileNotFoundError:
         print(f"Error: File '{args.input}' not found", file=sys.stderr)
         sys.exit(1)
