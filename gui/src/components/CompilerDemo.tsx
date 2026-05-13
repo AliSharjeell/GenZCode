@@ -192,11 +192,35 @@ function TokenBadge({ token, delay }: { token: TokenItem; delay: number }) {
   );
 }
 
-function ASTNodeView({ node, depth = 0 }: { node: ASTNode | null; depth?: number }) {
+function ASTNodeView({
+  node,
+  depth = 0,
+  prefix = "",
+  isLast = true,
+  isRoot = true,
+}: {
+  node: ASTNode | null;
+  depth?: number;
+  prefix?: string;
+  isLast?: boolean;
+  isRoot?: boolean;
+}) {
   if (!node || typeof node !== "object") {
-    return <span className="text-xs font-mono text-amber-400">{node === null ? "null" : String(node)}</span>;
+    return (
+      <div className="flex items-center" style={{ fontFamily: "monospace" }}>
+        {!isRoot && (
+          <span className="select-none" style={{ color: "#4b5563", whiteSpace: "pre" }}>
+            {prefix}{isLast ? "└── " : "├── "}
+          </span>
+        )}
+        <span style={{ fontSize: "13px", color: "#fbbf24", fontFamily: "monospace" }}>
+          {node === null ? "null" : String(node)}
+        </span>
+      </div>
+    );
   }
-  const [expanded, setExpanded] = useState(depth < 1);
+
+  const [expanded, setExpanded] = useState(depth < 2);
   const typeName = node._type || "Unknown";
   const children = Object.entries(node).filter(([k]) => k !== "_type");
   const hasChildren = children.length > 0;
@@ -210,37 +234,110 @@ function ASTNodeView({ node, depth = 0 }: { node: ASTNode | null; depth?: number
     Assignment: "#3b82f6", Block: "#10b981",
   };
 
+  const nodeColor = colorMap[typeName] || "#d4d4d8";
+  const lineColor = "#374151";
+  const childPrefix = isRoot ? "" : prefix + (isLast ? "    " : "│   ");
+
+  // Flatten children: each key-value pair becomes a child entry
+  const flatChildren: { label: string; value: any }[] = [];
+  if (!isLeaf && expanded) {
+    for (const [k, v] of children) {
+      if (Array.isArray(v)) {
+        if (v.length === 0) {
+          flatChildren.push({ label: `${k}: []`, value: null });
+        } else {
+          v.forEach((item, i) => flatChildren.push({ label: i === 0 ? `${k}[${i}]` : `[${i}]`, value: item }));
+        }
+      } else if (v !== null && typeof v === "object") {
+        flatChildren.push({ label: k, value: v });
+      } else {
+        flatChildren.push({ label: `${k}: ${typeof v === "string" ? `"${v}"` : String(v)}`, value: null });
+      }
+    }
+  }
+
   return (
-    <div className="flex flex-col">
-      <button
-        onClick={() => hasChildren && setExpanded(!expanded)}
-        className="flex items-center gap-1 text-left hover:bg-white/[0.03] rounded px-1 py-0.5 transition-colors"
-        style={{ paddingLeft: `${depth * 20}px` }}
+    <div style={{ fontFamily: "monospace" }}>
+      {/* Node row */}
+      <div
+        className="flex items-center gap-1 hover:bg-white/[0.03] rounded transition-colors cursor-pointer"
+        style={{ paddingTop: "1px", paddingBottom: "1px" }}
+        onClick={() => hasChildren && !isLeaf && setExpanded(!expanded)}
       >
-        {hasChildren && !isLeaf ? (
-          expanded ? <ChevronRight size={10} className="text-zinc-500 rotate-90 transition-transform" />
-            : <ChevronRight size={10} className="text-zinc-500 transition-transform" />
-        ) : <div className="w-[10px] shrink-0" />}
-        <span className="text-xs font-bold" style={{ color: colorMap[typeName] || "#d4d4d8" }}>{typeName}</span>
-        {isLeaf && children.length > 0 && (
-          <span className="text-[10px] text-zinc-600 ml-1">
-            {children.map(([k, v]) => `${k}: ${typeof v === "string" ? `"${v}"` : String(v)}`).join(", ")}
+        {/* Tree prefix */}
+        {!isRoot && (
+          <span className="select-none" style={{ color: lineColor, whiteSpace: "pre", fontSize: "13px" }}>
+            {prefix}{isLast ? "└── " : "├── "}
           </span>
         )}
-      </button>
-      {expanded && hasChildren && !isLeaf && (
-        <div className="flex flex-col">
-          {children.map(([key, value]) => (
-            <div key={key} className="flex items-start gap-2 text-left" style={{ paddingLeft: `${(depth + 1) * 20}px` }}>
-              <span className="text-[10px] font-mono text-zinc-600 mt-0.5 shrink-0">{key}:</span>
-              {Array.isArray(value) ? (
-                <div className="flex flex-col">
-                  {value.length === 0 ? <span className="text-[10px] text-zinc-600">[]</span>
-                    : value.map((item, i) => <ASTNodeView key={i} node={item} depth={depth + 2} />)}
+
+        {/* Expand toggle */}
+        {hasChildren && !isLeaf ? (
+          <ChevronRight
+            size={12}
+            className="shrink-0 transition-transform"
+            style={{ color: "#6b7280", transform: expanded ? "rotate(90deg)" : "rotate(0deg)" }}
+          />
+        ) : (
+          <div style={{ width: 12 }} />
+        )}
+
+        {/* Node type label */}
+        <span style={{ fontSize: "13.5px", fontWeight: 700, color: nodeColor, fontFamily: "monospace" }}>
+          {typeName}
+        </span>
+
+        {/* Leaf values inline */}
+        {isLeaf && children.length > 0 && (
+          <span style={{ fontSize: "12px", color: "#6b7280", fontFamily: "monospace", marginLeft: 4 }}>
+            {children.map(([k, v]) => `${k}: ${typeof v === "string" ? `"${v}"` : String(v)}`).join("  ·  ")}
+          </span>
+        )}
+
+        {/* Collapsed indicator */}
+        {!isLeaf && !expanded && (
+          <span style={{ fontSize: "11px", color: "#4b5563", marginLeft: 6 }}>
+            ({children.length} {children.length === 1 ? "field" : "fields"}) …
+          </span>
+        )}
+      </div>
+
+      {/* Children */}
+      {expanded && flatChildren.length > 0 && (
+        <div>
+          {flatChildren.map((child, i) => {
+            const childIsLast = i === flatChildren.length - 1;
+            if (child.value === null) {
+              // Leaf label row (array empty / primitive field)
+              return (
+                <div key={i} className="flex items-center" style={{ paddingTop: "1px", paddingBottom: "1px" }}>
+                  <span className="select-none" style={{ color: lineColor, whiteSpace: "pre", fontSize: "13px" }}>
+                    {childPrefix}{childIsLast ? "└── " : "├── "}
+                  </span>
+                  <span style={{ fontSize: "12px", color: "#9ca3af", fontFamily: "monospace" }}>{child.label}</span>
                 </div>
-              ) : <ASTNodeView node={value} depth={depth + 2} />}
-            </div>
-          ))}
+              );
+            }
+            // Wrap with label if there's a named key
+            return (
+              <div key={i}>
+                {/* Key label row */}
+                <div className="flex items-center" style={{ paddingTop: "1px" }}>
+                  <span className="select-none" style={{ color: lineColor, whiteSpace: "pre", fontSize: "13px" }}>
+                    {childPrefix}{childIsLast ? "└─ " : "├─ "}
+                  </span>
+                  <span style={{ fontSize: "11.5px", color: "#6b7280", fontFamily: "monospace" }}>{child.label}:</span>
+                </div>
+                <ASTNodeView
+                  node={child.value}
+                  depth={depth + 1}
+                  prefix={childPrefix + (childIsLast ? "   " : "│  ")}
+                  isLast={true}
+                  isRoot={false}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
